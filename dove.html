@@ -24,36 +24,78 @@
   </div>
 </header>
 <main>
-<section class="phead" style="padding:0">
+<section class="phead dhead" style="padding:0">
   <div class="ghost x" aria-hidden="true">BG</div>
   <div class="livery" aria-hidden="true"><i class="b4"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
   <div class="wrap">
     <div class="lab" style="color:var(--red)">Dove siamo</div>
-    <h1 class="x">Covo, Bergamo</h1>
-    <p>La pista non ha un civico. Apri la mappa e arrivi dritto all'ingresso.</p>
+    <h1 class="x">Covo,<br>Bergamo</h1>
+    <p>Nel mezzo della Bassa Bergamasca, tra Bergamo, Brescia e Milano. La pista non ha un civico: usa i bottoni qui sotto e il navigatore ti porta all'ingresso.</p>
   </div>
 </section>
-<section><div class="wrap where">
-  <div>
-    <div class="lab" style="color:var(--blue)">In auto</div>
-    <h2 class="x">Nel cuore della Bassa</h2>
-    <p class="sub">Tempi indicativi, senza traffico.</p>
-    <div class="btns"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=GQ3R%2BHC%20Covo%20BG" target="_blank" rel="noopener"><span>Apri in Google Maps</span></a></div>
-    <p class="pcode">Codice Maps: <b id="pc">GQ3R+HC Covo</b><button class="copy" id="copy" type="button">Copia</button></p>
+
+<section class="mapsec"><div class="wrap">
+  <div class="mapgrid">
+    <div class="side">
+      <div class="lab" style="color:#9aa3b5">Da dove arrivi?</div>
+      <div class="cities" role="group" aria-label="Scegli la città di partenza"><button class="cbtn on" type="button" data-c="bergamo" data-t="~30'" data-d="Si scende verso sud, dritti nella Bassa."><span class="cn x">Bergamo</span><span class="ct x">~30'</span></button><button class="cbtn" type="button" data-c="treviglio" data-t="~25'" data-d="Da ovest, dritto attraverso la Bassa."><span class="cn x">Treviglio</span><span class="ct x">~25'</span></button><button class="cbtn" type="button" data-c="crema" data-t="~25'" data-d="Da sud, risalendo verso Covo."><span class="cn x">Crema</span><span class="ct x">~25'</span></button><button class="cbtn" type="button" data-c="brescia" data-t="~40'" data-d="Da est, attraversando il fiume Oglio."><span class="cn x">Brescia</span><span class="ct x">~40'</span></button><button class="cbtn" type="button" data-c="milano" data-t="~50'" data-d="Da ovest, la tratta più lunga."><span class="cn x">Milano</span><span class="ct x">~50'</span></button></div>
+      <div class="readout" aria-live="polite">
+        <div class="from x" id="roFrom">Bergamo</div>
+        <div class="arrow" aria-hidden="true"><i></i></div>
+        <div class="to x">MXE.45</div>
+        <div class="time x" id="roTime">~30'</div>
+        <p id="roText">A nord, passando per la pianura verso sud.</p>
+      </div>
+    </div>
+    <div class="mapbox">
+      <svg viewBox="0 0 1000 593" role="img" aria-label="Mappa indicativa: Covo e le città vicine">
+        <g class="grid"><line x1="0" y1="0" x2="0" y2="593"/><line x1="50" y1="0" x2="50" y2="593"/><line x1="100" y1="0" x2="100" y2="593"/><line x1="150" y1="0" x2="150" y2="593"/><line x1="200" y1="0" x2="200" y2="593"/><line x1="250" y1="0" x2="250" y2="593"/><line x1="300" y1="0" x2="300" y2="593"/><line x1="350" y1="0" x2="350" y2="593"/><line x1="400" y1="0" x2="400" y2="593"/><line x1="450" y1="0" x2="450" y2="593"/><line x1="500" y1="0" x2="500" y2="593"/><line x1="550" y1="0" x2="550" y2="593"/><line x1="600" y1="0" x2="600" y2="593"/><line x1="650" y1="0" x2="650" y2="593"/><line x1="700" y1="0" x2="700" y2="593"/><line x1="750" y1="0" x2="750" y2="593"/><line x1="800" y1="0" x2="800" y2="593"/><line x1="850" y1="0" x2="850" y2="593"/><line x1="900" y1="0" x2="900" y2="593"/><line x1="950" y1="0" x2="950" y2="593"/><line x1="1000" y1="0" x2="1000" y2="593"/><line x1="0" y1="0" x2="1000" y2="0"/><line x1="0" y1="50" x2="1000" y2="50"/><line x1="0" y1="100" x2="1000" y2="100"/><line x1="0" y1="150" x2="1000" y2="150"/><line x1="0" y1="200" x2="1000" y2="200"/><line x1="0" y1="250" x2="1000" y2="250"/><line x1="0" y1="300" x2="1000" y2="300"/><line x1="0" y1="350" x2="1000" y2="350"/><line x1="0" y1="400" x2="1000" y2="400"/><line x1="0" y1="450" x2="1000" y2="450"/><line x1="0" y1="500" x2="1000" y2="500"/><line x1="0" y1="550" x2="1000" y2="550"/></g>
+        <g><path class="road" d="M481 121 Q487 253 576 351"/><path class="road" d="M412 331 Q490 371 576 351"/><path class="road" d="M486 517 Q561 450 576 351"/><path class="road" d="M932 307 Q746 265 576 351"/><path class="road" d="M75 398 Q334 465 576 351"/></g>
+        <g><path class="route" data-c="bergamo" id="r-bergamo" d="M481 121 Q487 253 576 351"/><path class="route" data-c="treviglio" id="r-treviglio" d="M412 331 Q490 371 576 351"/><path class="route" data-c="crema" id="r-crema" d="M486 517 Q561 450 576 351"/><path class="route" data-c="brescia" id="r-brescia" d="M932 307 Q746 265 576 351"/><path class="route" data-c="milano" id="r-milano" d="M75 398 Q334 465 576 351"/></g>
+        <circle class="rider" r="10" cx="0" cy="0"/>
+        <g><g class="city" data-c="bergamo"><circle cx="481" cy="121" r="9"/><text x="497" y="107" text-anchor="start">Bergamo</text></g><g class="city" data-c="treviglio"><circle cx="412" cy="331" r="9"/><text x="396" y="317" text-anchor="end">Treviglio</text></g><g class="city" data-c="crema"><circle cx="486" cy="517" r="9"/><text x="502" y="503" text-anchor="start">Crema</text></g><g class="city" data-c="brescia"><circle cx="932" cy="307" r="9"/><text x="916" y="293" text-anchor="end">Brescia</text></g><g class="city" data-c="milano"><circle cx="75" cy="398" r="9"/><text x="91" y="384" text-anchor="start">Milano</text></g></g>
+        <g class="pin" transform="translate(576 351)">
+          <circle class="ring" r="20"/><circle class="ring r2" r="20"/>
+          <path class="plate" d="M-30 -74 h60 a8 8 0 0 1 8 8 v40 q0 16 -16 18 h-44 q-16 -2 -16 -18 v-40 a8 8 0 0 1 8 -8z"/>
+          <text class="pn" x="0" y="-32" text-anchor="middle">45</text>
+          <path class="stem" d="M0 -8 L0 0"/>
+          <circle r="7" class="dotc"/>
+        </g>
+      </svg>
+      <span class="maplab">Mappa e tempi indicativi</span>
+    </div>
   </div>
-  <ul class="km rv">
-    <li><span>da Treviglio</span><b class="x">~25'</b></li>
-    <li><span>da Bergamo</span><b class="x">~30'</b></li>
-    <li><span>da Brescia</span><b class="x">~40'</b></li>
-    <li><span>da Milano</span><b class="x">~50'</b></li>
-  </ul>
 </div></section>
-<section style="padding-top:0"><div class="wrap">
-  <div class="lab" style="color:var(--blue)">Contatti</div><h2 class="x">Scrivici</h2>
-  <div class="cards rv">
-    <div class="card"><h3 class="x">Instagram</h3><p>Il canale più veloce. Lì escono orari e aggiornamenti.</p><a href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">@mxe.45 →</a></div>
-    <div class="card"><h3 class="x">Telefono</h3><p><span class="tbd">Da inserire</span></p></div>
-    <div class="card"><h3 class="x">WhatsApp</h3><p><span class="tbd">Da inserire</span></p></div>
+
+<section><div class="wrap">
+  <div class="lab" style="color:var(--blue)">Navigatore</div>
+  <h2 class="x">Portami in pista</h2>
+  <p class="sub">Tocca il tuo navigatore e parte già con la destinazione impostata.</p>
+  <div class="navs rv">
+    <a class="nav-b" href="https://www.google.com/maps/dir/?api=1&amp;destination=45.5039,9.7911" target="_blank" rel="noopener"><span class="lab">Apri con</span><span class="x">Google Maps</span><i>→</i></a>
+    <a class="nav-b" href="https://maps.apple.com/?daddr=45.5039,9.7911&amp;q=MXE.45" target="_blank" rel="noopener"><span class="lab">Apri con</span><span class="x">Apple Mappe</span><i>→</i></a>
+    <a class="nav-b" href="https://waze.com/ul?ll=45.5039,9.7911&amp;navigate=yes" target="_blank" rel="noopener"><span class="lab">Apri con</span><span class="x">Waze</span><i>→</i></a>
+  </div>
+  <div class="sticker rv">
+    <div>
+      <div class="lab">Codice Google Maps</div>
+      <div class="x code" id="pc">GQ3R+HC Covo</div>
+    </div>
+    <div>
+      <div class="lab">Coordinate</div>
+      <div class="x coord">45.5039, 9.7911</div>
+    </div>
+    <button class="btn" id="copy" type="button"><span>Copia</span></button>
+  </div>
+</div></section>
+
+<section class="contacts"><div class="wrap">
+  <div class="lab" style="color:#dbe4ff">Contatti</div>
+  <h2 class="x">Hai un dubbio? Scrivici</h2>
+  <div class="crow">
+    <a class="cc" href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener"><span class="lab">Instagram · il più veloce</span><span class="x">@mxe.45</span></a>
+    <div class="cc"><span class="lab">Telefono</span><span class="tbd">Da inserire</span></div>
+    <div class="cc"><span class="lab">WhatsApp</span><span class="tbd">Da inserire</span></div>
   </div>
 </div></section>
 </main>
