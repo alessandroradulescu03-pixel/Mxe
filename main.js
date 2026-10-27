@@ -225,11 +225,11 @@
   io.observe(f);
 })();
 
-// meteo live a Covo (Open-Meteo, gratuito, senza chiave)
+// meteo live a Covo (Open-Meteo, gratuito, senza chiave) — oggi + previsioni fino a 14 giorni
 (function(){
   var boxes=[].slice.call(document.querySelectorAll('[data-meteo]'));
   if(!boxes.length)return;
-  var LAT=45.5039,LON=9.7911;
+  var LAT=45.5039,LON=9.7911,PER=5,DATA=null;
   var I={
     sun:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="#ffc65c"/><g stroke="#ffc65c" stroke-width="3" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/></g></svg>',
     moon:'<svg viewBox="0 0 48 48"><path d="M30 8a16 16 0 1 0 10 28A14 14 0 0 1 30 8z" fill="#c9cfdb"/></svg>',
@@ -254,36 +254,52 @@
     if(c>=95)return['storm','Temporale'];
     return['cloud','—'];
   }
-  var dn=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+  var dn=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],mn=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
   function fmt(n){return (Math.round(n*10)/10).toString().replace('.',',')}
+  function dt(s){return new Date(s+'T12:00:00')}
+  function dlabel(x){return x.getDate()+' '+mn[x.getMonth()]}
+  function days(b){
+    if(!DATA)return;
+    var dl=DATA.daily,tot=Math.min(15,dl.time.length-1),pages=Math.ceil(tot/PER),pg=+(b.dataset.page||0);
+    var from=1+pg*PER,to=Math.min(dl.time.length-1,from+PER-1),h='';
+    for(var i=from;i<=to;i++){
+      var x=dt(dl.time[i]),k=info(dl.weather_code[i],true),mon=x.getDay()===1;
+      h+='<li class="'+(i===1?'is-today ':'')+(mon?'off':'')+'"><span class="lab">'+(i===1?'Oggi':dn[x.getDay()]+' '+x.getDate())+'</span>'+I[k[0]]+
+        '<b class="x">'+Math.round(dl.temperature_2m_max[i])+'°<small> / '+Math.round(dl.temperature_2m_min[i])+'°</small></b>'+
+        '<span class="m-p">💧 '+(dl.precipitation_probability_max[i]||0)+'%</span>'+(mon?'<span class="m-off">pista chiusa</span>':'')+'</li>';
+    }
+    b.querySelector('[data-m="days"]').innerHTML=h;
+    b.querySelector('[data-m="range"]').textContent=(pg===0?'Prossimi giorni · ':'')+dlabel(dt(dl.time[from]))+' – '+dlabel(dt(dl.time[to]));
+    b.querySelector('[data-m="prev"]').disabled=pg===0;
+    b.querySelector('[data-m="next"]').disabled=pg>=pages-1;
+  }
   function render(d){
+    DATA=d;
     var c=d.current,dl=d.daily,k=info(c.weather_code,c.is_day===1);
-    var rainY=dl.precipitation_sum[0]||0,rainT=dl.precipitation_sum[1]||0;
-    var track;
+    var rainY=dl.precipitation_sum[0]||0,track;
     if(c.precipitation>0.2||[51,53,55,61,63,65,80,81,82,95,96,99].indexOf(c.weather_code)>=0)track='🌧️ Sta piovendo: pista probabilmente chiusa o fangosa. Controlla Instagram.';
     else if(rainY>=5)track='💧 Ieri è piovuto parecchio: fondo probabilmente bagnato.';
-    else if(rainY>0)track='Ieri qualche goccia, fondo leggermente umido.';
+    else if(rainY>0)track='Ieri qualche goccia: fondo leggermente umido.';
     else track='☀️ Niente pioggia ieri: fondo asciutto.';
+    var t=new Date();
     boxes.forEach(function(b){
       function s(n,v,html){var e=b.querySelector('[data-m="'+n+'"]');if(e){if(html)e.innerHTML=v;else e.textContent=v}}
       s('ico',I[k[0]],1);s('temp',Math.round(c.temperature_2m)+'°');s('desc',k[1]);
       s('feel',Math.round(c.apparent_temperature)+'°');s('wind',Math.round(c.wind_speed_10m)+' km/h');s('rainy',fmt(rainY)+' mm');
-      s('track',track);
-      var h='';
-      for(var i=1;i<=3&&i<dl.time.length;i++){
-        var dt=new Date(dl.time[i]+'T12:00:00'),ki=info(dl.weather_code[i],true);
-        h+='<li><span class="lab">'+(i===1?'Oggi':dn[dt.getDay()])+'</span>'+I[ki[0]]+'<b class="x">'+Math.round(dl.temperature_2m_max[i])+'°<small> / '+Math.round(dl.temperature_2m_min[i])+'°</small></b><span class="m-p">💧 '+(dl.precipitation_probability_max[i]||0)+'%</span></li>';
-      }
-      s('days',h,1);
-      var t=new Date();s('upd',('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2));
-      b.classList.add('ok');
+      s('track',track);s('upd',('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2));
+      days(b);b.classList.add('ok');
     });
   }
+  boxes.forEach(function(b){
+    b.dataset.page=0;
+    b.querySelector('[data-m="prev"]').addEventListener('click',function(){b.dataset.page=Math.max(0,+b.dataset.page-1);days(b)});
+    b.querySelector('[data-m="next"]').addEventListener('click',function(){b.dataset.page=+b.dataset.page+1;days(b)});
+  });
   function load(){
     var u='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+
       '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,is_day'+
       '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum'+
-      '&past_days=1&forecast_days=4&timezone=Europe%2FRome';
+      '&past_days=1&forecast_days=15&timezone=Europe%2FRome';
     fetch(u).then(function(r){return r.json()}).then(render).catch(function(){
       boxes.forEach(function(b){var e=b.querySelector('[data-m="desc"]');if(e&&!b.classList.contains('ok'))e.textContent='Meteo non disponibile adesso'});
     });
