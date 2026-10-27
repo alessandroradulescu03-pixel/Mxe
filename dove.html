@@ -41,6 +41,15 @@
     <div class="side">
       <div class="lab" style="color:#9aa3b5">Da dove arrivi?</div>
       <div class="cities" role="group" aria-label="Scegli la città di partenza"><button class="cbtn on" type="button" data-c="bergamo" data-t="~30'" data-d="Scendi verso sud, nella Bassa." data-ll="45.698,9.677"><span class="cn x">Bergamo</span><span class="ct x">~30'</span></button><button class="cbtn" type="button" data-c="treviglio" data-t="~25'" data-d="Da ovest, dritto attraverso la Bassa." data-ll="45.521,9.594"><span class="cn x">Treviglio</span><span class="ct x">~25'</span></button><button class="cbtn" type="button" data-c="crema" data-t="~25'" data-d="Da sud, risalendo verso Covo." data-ll="45.364,9.684"><span class="cn x">Crema</span><span class="ct x">~25'</span></button><button class="cbtn" type="button" data-c="brescia" data-t="~40'" data-d="Da est, attraversando il fiume Oglio." data-ll="45.541,10.219"><span class="cn x">Brescia</span><span class="ct x">~40'</span></button><button class="cbtn" type="button" data-c="milano" data-t="~50'" data-d="Da ovest, la tratta più lunga." data-ll="45.464,9.19"><span class="cn x">Milano</span><span class="ct x">~50'</span></button></div>
+      <form class="from-form" id="fromForm" autocomplete="off">
+        <label class="lab" for="fromInput" style="color:#9aa3b5">Oppure scrivi da dove parti</label>
+        <div class="from-row">
+          <input id="fromInput" name="from" type="text" placeholder="Es. Romano di Lombardia" required>
+          <button type="submit" aria-label="Calcola percorso">Vai</button>
+        </div>
+        <button type="button" class="geo" id="geoBtn">Usa la mia posizione</button>
+        <p class="from-msg" id="fromMsg" aria-live="polite"></p>
+      </form>
       <div class="readout" aria-live="polite">
         <div class="from x" id="roFrom">Bergamo</div>
         <div class="arrow" aria-hidden="true"><i></i></div>
