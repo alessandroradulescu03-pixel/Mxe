@@ -505,3 +505,13 @@ a.cc:hover{background:#1a44c4}
 .tbtn:hover i{transform:translateX(4px)}
 .tess-note{margin:18px 0 0;font-size:13px;color:#dbe4ff}
 .check a,.specs a{color:var(--blue);font-weight:700}
+/* bottoni tessere con blocco freccia come in Dove siamo */
+.tbtn{display:flex;align-items:center;justify-content:space-between;gap:14px;align-self:stretch;margin-top:auto;padding:0;background:none;color:var(--ink);transform:none;font-size:16px}
+.tbtn .x{font-size:18px}
+.tbtn i.go{width:52px;height:52px;display:grid;place-items:center;background:var(--ink);transform:skewX(-12deg);transition:background .2s,transform .25s}
+.tbtn i.go svg{width:22px;height:22px;fill:#fff;transform:skewX(12deg);transition:transform .25s}
+.tbtn:hover{background:none;color:var(--ink)}
+.tbtn:hover i.go{background:#25d366;transform:skewX(-12deg) translateX(4px)}
+.tbtn:hover i.go svg{fill:#0b2a17;transform:skewX(12deg) translateX(3px)}
+.tcard{gap:6px;padding-bottom:20px}
+.tfull{margin-bottom:14px}
