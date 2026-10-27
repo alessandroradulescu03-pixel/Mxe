@@ -390,3 +390,29 @@ a.cc:hover{background:#1a44c4}
 .trackmap .padl{fill:#6c7484;font:800 15px var(--wide);font-stretch:62%;letter-spacing:.3em}
 .trackmap .startlab rect{fill:var(--red)}
 .trackmap .startlab text{fill:#fff;font:900 italic 12px var(--wide);font-stretch:110%}
+
+/* meteo */
+.meteo-sec{padding-block:0 64px}
+.facts+.meteo-sec{padding-top:40px}
+.meteo{background:var(--ink);color:var(--white);display:grid;grid-template-columns:1.1fr .9fr 1.4fr;gap:28px 36px;padding:28px 30px 20px;clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%);position:relative}
+.meteo::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--blue)}
+@media (max-width:960px){.meteo{grid-template-columns:1fr 1fr}.m-days{grid-column:1/-1}}
+@media (max-width:600px){.meteo{grid-template-columns:1fr;padding:24px 20px 18px}}
+.meteo .lab{color:#9aa3b5}
+.m-now{min-width:0}
+.m-main{display:flex;align-items:center;gap:12px;margin-top:8px}
+.m-ico svg{width:64px;height:64px;display:block}
+.m-temp{font-size:clamp(56px,6vw,80px);line-height:.9}
+.m-desc{font-size:20px;margin-top:6px}
+.m-stats{list-style:none;margin:0;padding:0;display:grid;gap:10px;align-content:center}
+.m-stats li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #2a303b;padding-bottom:8px}
+.m-stats b{font-size:20px}
+.m-days{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m-days li{background:#1a1f28;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.m-days svg{width:40px;height:40px}
+.m-days b{font-size:20px}
+.m-days small{font-size:.7em;color:#9aa3b5}
+.m-p{font-size:13px;color:#9ab3ff}
+.m-note{grid-column:1/-1;margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;font-size:14px;color:#c9cfdb;border-top:1px solid #2a303b;padding-top:14px}
+.m-src{color:#6c7484;font-size:12px}
+.m-src a{color:#9aa3b5}

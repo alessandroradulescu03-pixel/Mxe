@@ -224,3 +224,69 @@
   })},{threshold:.25});
   io.observe(f);
 })();
+
+// meteo live a Covo (Open-Meteo, gratuito, senza chiave)
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('[data-meteo]'));
+  if(!boxes.length)return;
+  var LAT=45.5039,LON=9.7911;
+  var I={
+    sun:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="#ffc65c"/><g stroke="#ffc65c" stroke-width="3" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/></g></svg>',
+    moon:'<svg viewBox="0 0 48 48"><path d="M30 8a16 16 0 1 0 10 28A14 14 0 0 1 30 8z" fill="#c9cfdb"/></svg>',
+    part:'<svg viewBox="0 0 48 48"><circle cx="17" cy="17" r="8" fill="#ffc65c"/><path d="M15 38h22a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0-1 13z" fill="#c9cfdb"/></svg>',
+    cloud:'<svg viewBox="0 0 48 48"><path d="M13 38h24a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 38z" fill="#9aa3b5"/></svg>',
+    fog:'<svg viewBox="0 0 48 48"><path d="M13 28h24a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 28z" fill="#9aa3b5"/><g stroke="#9aa3b5" stroke-width="3" stroke-linecap="round"><path d="M8 34h32M12 40h24"/></g></svg>',
+    rain:'<svg viewBox="0 0 48 48"><path d="M13 30h24a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 30z" fill="#9aa3b5"/><g stroke="#7aa2ff" stroke-width="3" stroke-linecap="round"><path d="M16 35l-2 6M25 35l-2 6M34 35l-2 6"/></g></svg>',
+    snow:'<svg viewBox="0 0 48 48"><path d="M13 30h24a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 30z" fill="#9aa3b5"/><g fill="#fff"><circle cx="16" cy="38" r="2.2"/><circle cx="25" cy="41" r="2.2"/><circle cx="34" cy="38" r="2.2"/></g></svg>',
+    storm:'<svg viewBox="0 0 48 48"><path d="M13 28h24a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 28z" fill="#7a8292"/><path d="M26 28l-6 10h6l-4 8 10-12h-6l4-6z" fill="#ffc65c"/></svg>'
+  };
+  function info(c,day){
+    if(c===0)return[day?'sun':'moon','Sereno'];
+    if(c===1)return[day?'sun':'moon','Poco nuvoloso'];
+    if(c===2)return['part','Parzialmente nuvoloso'];
+    if(c===3)return['cloud','Nuvoloso'];
+    if(c===45||c===48)return['fog','Nebbia'];
+    if(c>=51&&c<=57)return['rain','Pioviggine'];
+    if(c>=61&&c<=67)return['rain',c>=65?'Pioggia forte':'Pioggia'];
+    if(c>=71&&c<=77)return['snow','Neve'];
+    if(c>=80&&c<=82)return['rain','Rovesci'];
+    if(c>=85&&c<=86)return['snow','Rovesci di neve'];
+    if(c>=95)return['storm','Temporale'];
+    return['cloud','—'];
+  }
+  var dn=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+  function fmt(n){return (Math.round(n*10)/10).toString().replace('.',',')}
+  function render(d){
+    var c=d.current,dl=d.daily,k=info(c.weather_code,c.is_day===1);
+    var rainY=dl.precipitation_sum[0]||0,rainT=dl.precipitation_sum[1]||0;
+    var track;
+    if(c.precipitation>0.2||[51,53,55,61,63,65,80,81,82,95,96,99].indexOf(c.weather_code)>=0)track='🌧️ Sta piovendo: pista probabilmente chiusa o fangosa. Controlla Instagram.';
+    else if(rainY>=5)track='💧 Ieri è piovuto parecchio: fondo probabilmente bagnato.';
+    else if(rainY>0)track='Ieri qualche goccia, fondo leggermente umido.';
+    else track='☀️ Niente pioggia ieri: fondo asciutto.';
+    boxes.forEach(function(b){
+      function s(n,v,html){var e=b.querySelector('[data-m="'+n+'"]');if(e){if(html)e.innerHTML=v;else e.textContent=v}}
+      s('ico',I[k[0]],1);s('temp',Math.round(c.temperature_2m)+'°');s('desc',k[1]);
+      s('feel',Math.round(c.apparent_temperature)+'°');s('wind',Math.round(c.wind_speed_10m)+' km/h');s('rainy',fmt(rainY)+' mm');
+      s('track',track);
+      var h='';
+      for(var i=1;i<=3&&i<dl.time.length;i++){
+        var dt=new Date(dl.time[i]+'T12:00:00'),ki=info(dl.weather_code[i],true);
+        h+='<li><span class="lab">'+(i===1?'Oggi':dn[dt.getDay()])+'</span>'+I[ki[0]]+'<b class="x">'+Math.round(dl.temperature_2m_max[i])+'°<small> / '+Math.round(dl.temperature_2m_min[i])+'°</small></b><span class="m-p">💧 '+(dl.precipitation_probability_max[i]||0)+'%</span></li>';
+      }
+      s('days',h,1);
+      var t=new Date();s('upd',('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2));
+      b.classList.add('ok');
+    });
+  }
+  function load(){
+    var u='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+
+      '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,is_day'+
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum'+
+      '&past_days=1&forecast_days=4&timezone=Europe%2FRome';
+    fetch(u).then(function(r){return r.json()}).then(render).catch(function(){
+      boxes.forEach(function(b){var e=b.querySelector('[data-m="desc"]');if(e&&!b.classList.contains('ok'))e.textContent='Meteo non disponibile adesso'});
+    });
+  }
+  load();setInterval(load,10*60*1000);
+})();
