@@ -366,3 +366,11 @@ a.cc:hover{background:#1a44c4}
 .readout .time u{text-decoration:none;font-size:clamp(20px,2vw,28px);color:#c9cfdb}
 .readout .time.long b{font-size:clamp(52px,5.6vw,80px)}
 .km b small{font-size:.45em;font-stretch:100%;color:var(--grey);margin-right:4px}
+
+/* bottoni navigatore: blocco inclinato con chevron pieno */
+.nav-b{padding-right:110px;min-height:120px;justify-content:center}
+.nav-b i.go{position:absolute;right:26px;top:50%;bottom:auto;width:60px;height:60px;margin-top:-30px;display:grid;place-items:center;background:var(--ink);transform:skewX(-12deg);transition:background .2s,transform .25s}
+.nav-b i.go svg{width:26px;height:26px;fill:var(--white);transform:skewX(12deg);transition:transform .25s}
+.nav-b:hover i.go{background:var(--white);transform:skewX(-12deg) translateX(4px)}
+.nav-b:hover i.go svg{fill:var(--blue);transform:skewX(12deg) translateX(3px)}
+@media (max-width:600px){.nav-b{padding-right:92px;min-height:100px}.nav-b i.go{width:50px;height:50px;margin-top:-25px;right:20px}}
