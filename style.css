@@ -2,8 +2,8 @@
 /* Layout: grafica da kit adesivi motocross — plastiche bianche, strisce diagonali blu/rosso/nero, scritte corsive larghe. Tema chiaro voluto, unico. */
 :root{
   color-scheme:light;
-  --white:#f7f8fa;     /* plastica bianca */
-  --paper:#eceef2;     /* grigio plastica */
+  --white:#e3e6eb;     /* plastica grigio chiaro */
+  --paper:#d3d8e0;     /* grigio plastica */
   --ink:#0e1116;       /* nero adesivo */
   --blue:#1f4fe0;      /* blu MXE */
   --red:#e2232d;       /* rosso swoosh logo */
@@ -110,7 +110,7 @@ h2{font-size:clamp(36px,5.6vw,68px);line-height:.92;margin:12px 0 18px;text-wrap
 .where{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
 @media (max-width:900px){.where{grid-template-columns:1fr}}
 .km{list-style:none;margin:0;padding:0;border-top:3px solid var(--ink)}
-.km li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid #d5d9e0}
+.km li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid #bfc5cf}
 .km b{font-size:34px;line-height:1}
 .km span{color:var(--grey)}
 
@@ -179,7 +179,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;
 .track .jump{fill:var(--red)}
 .track text{fill:var(--grey);font:700 13px var(--wide);font-stretch:62%;text-transform:uppercase;letter-spacing:.1em}
 .specs{list-style:none;margin:0;padding:0;border-top:3px solid var(--ink)}
-.specs li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid #d5d9e0}
+.specs li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid #bfc5cf}
 .specs span{color:var(--grey)}
 .specs b{font-size:20px;text-align:right}
 .tbd{display:inline-block;font:700 11px/1 var(--wide);font-stretch:62%;letter-spacing:.1em;text-transform:uppercase;background:#ffe3e4;color:#a3121a;padding:5px 8px;font-style:normal;vertical-align:middle}
@@ -188,11 +188,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;
 .split{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
 @media (max-width:900px){.split{grid-template-columns:1fr;gap:32px}}
 .check{list-style:none;margin:0;padding:0;counter-reset:c;border-top:3px solid var(--ink)}
-.check li{display:grid;grid-template-columns:56px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid #d5d9e0}
+.check li{display:grid;grid-template-columns:56px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid #bfc5cf}
 .check li::before{counter-increment:c;content:counter(c,decimal-leading-zero);font:900 italic 30px/1 var(--wide);font-stretch:125%;color:var(--blue)}
 .check b{display:block;font-size:18px;margin-bottom:4px}
 .check span{color:var(--grey)}
-.faq details{border-bottom:1px solid #d5d9e0}
+.faq details{border-bottom:1px solid #bfc5cf}
 .faq details:first-child{border-top:3px solid var(--ink)}
 .faq summary{cursor:pointer;list-style:none;padding:22px 0;display:flex;justify-content:space-between;gap:16px;font:900 italic clamp(20px,2.6vw,28px)/1.1 var(--wide);font-stretch:125%;text-transform:uppercase}
 .faq summary::-webkit-details-marker{display:none}
@@ -301,8 +301,8 @@ a.cc:hover{background:#1a44c4}
 .facts .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
 @media (max-width:760px){.facts .wrap{grid-template-columns:1fr}}
 .fact{display:flex;flex-direction:column;gap:4px;padding:26px 24px 24px 0;min-width:0}
-.fact+.fact{border-left:1px solid #d5d9e0;padding-left:24px}
-@media (max-width:760px){.fact+.fact{border-left:0;border-top:1px solid #d5d9e0;padding-left:0}}
+.fact+.fact{border-left:1px solid #bfc5cf;padding-left:24px}
+@media (max-width:760px){.fact+.fact{border-left:0;border-top:1px solid #bfc5cf;padding-left:0}}
 .fact b{font-size:clamp(28px,3.4vw,42px);line-height:1;color:var(--blue)}
 .fact b small{font-size:.5em;color:var(--grey)}
 .fact span{color:var(--grey)}
@@ -332,3 +332,14 @@ a.cc:hover{background:#1a44c4}
 .crow{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1000px){.crow{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:600px){.crow{grid-template-columns:1fr}}
+
+/* mappa OSM in versione scura */
+.mxtiles{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.85) saturate(.35)}
+
+/* sezione scura */
+.dark{background:var(--ink);color:var(--white)}
+.dark .sub{color:#9aa3b5}
+.dark .panel{background:#1a1f28}
+.dark .panel p{color:#9aa3b5}
+.dark .panel .no{color:#232a35}
+.dark .panel:nth-child(3) .stripe{background:var(--white)}

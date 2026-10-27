@@ -70,9 +70,9 @@
 
   if(window.L){
     map=L.map(el,{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView(dest,10);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-      maxZoom:18,subdomains:'abcd',
-      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19,className:'mxtiles',
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
     map.attributionControl.setPrefix(false);
     var pin=L.divIcon({className:'mxpin',html:'<span class="r"></span><span class="r r2"></span><b>45</b><i></i>',iconSize:[60,80],iconAnchor:[30,74]});
