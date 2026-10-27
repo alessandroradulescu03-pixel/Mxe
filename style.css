@@ -357,3 +357,12 @@ a.cc:hover{background:#1a44c4}
 .geo{align-self:flex-start;background:none;border:0;padding:4px 0;color:#9ab3ff;cursor:pointer;font:700 14px var(--wide);text-decoration:underline}
 .geo:hover{color:#fff}
 .from-msg{margin:0;min-height:1.2em;font-size:14px;color:#ffc65c}
+
+/* tempo "circa" */
+.readout .time{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 14px;font-size:inherit;line-height:1}
+.readout .time .circa{flex-basis:100%;font-size:18px;font-stretch:100%;color:#9aa3b5;letter-spacing:.04em;margin-bottom:6px}
+.readout .time .seg{display:inline-flex;align-items:baseline;gap:6px}
+.readout .time b{font-size:clamp(64px,8vw,104px);line-height:.9}
+.readout .time u{text-decoration:none;font-size:clamp(20px,2vw,28px);color:#c9cfdb}
+.readout .time.long b{font-size:clamp(52px,5.6vw,80px)}
+.km b small{font-size:.45em;font-stretch:100%;color:var(--grey);margin-right:4px}

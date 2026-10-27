@@ -120,14 +120,34 @@
       setTimeout(function(){p.style.transition='none';p.style.strokeDasharray='';p.style.strokeDashoffset=''},1300);
     }
   }
-  function setTime(t,txt){document.getElementById('roTime').textContent=t;if(txt)document.getElementById('roText').textContent=txt}
+  // minuti -> "circa 9 ore 30 min" / "circa 1 giorno 3 ore"
+  function parts(min){
+    min=Math.max(1,Math.round(min));
+    if(min<60){return [[min>=20?Math.round(min/5)*5:min,'min']]}
+    if(min<24*60){
+      var h=Math.floor(min/60),m=Math.round((min%60)/5)*5;
+      if(m===60){h++;m=0}
+      var out=[[h,h===1?'ora':'ore']];if(m)out.push([m,'min']);return out;
+    }
+    var d=Math.floor(min/1440),hh=Math.round((min%1440)/60);
+    if(hh===24){d++;hh=0}
+    var o=[[d,d===1?'giorno':'giorni']];if(hh)o.push([hh,hh===1?'ora':'ore']);return o;
+  }
+  function setTime(t,txt){
+    var el=document.getElementById('roTime');
+    if(typeof t==='number'){
+      el.innerHTML='<span class="circa">circa</span>'+parts(t).map(function(p){return '<span class="seg"><b>'+p[0]+'</b><u>'+p[1]+'</u></span>'}).join('');
+      el.classList.toggle('long',t>=60);
+    }else{el.textContent=t;el.classList.remove('long')}
+    if(txt)document.getElementById('roText').textContent=txt;
+  }
 
   function flash(){ro.classList.remove('flash');void ro.offsetWidth;ro.classList.add('flash')}
   // calcola e disegna il percorso da "from" [lat,lon] alla pista
   function routeFrom(key,label,from,fallbackT,fallbackD){
     cur=key;
     document.getElementById('roFrom').textContent=label;
-    setTime(fallbackT||'…',fallbackD||'Calcolo il percorso…');
+    setTime(fallbackT?+fallbackT:'…',fallbackD||'Calcolo il percorso…');
     flash();
     if(!map)return;
     if(startDot)map.removeLayer(startDot);
@@ -135,18 +155,18 @@
     function show(r){
       if(cur!==key)return;
       draw(r.coords);
-      setTime("~"+r.min+"'",r.km+' km in auto, percorso più veloce.');
+      setTime(r.min,r.km.toLocaleString('it-IT')+' km in auto, percorso più veloce.');
     }
     if(cache[key])return show(cache[key]);
     var url='https://router.project-osrm.org/route/v1/driving/'+from[1]+','+from[0]+';'+dest[1]+','+dest[0]+'?overview=full&geometries=geojson';
     fetch(url).then(function(r){return r.json()}).then(function(d){
       var rt=d.routes[0],m=Math.round(rt.duration/60);
-      cache[key]={coords:rt.geometry.coordinates.map(function(p){return[p[1],p[0]]}),min:m>=20?Math.round(m/5)*5:Math.max(1,m),km:Math.max(1,Math.round(rt.distance/1000))};
+      cache[key]={coords:rt.geometry.coordinates.map(function(p){return[p[1],p[0]]}),min:rt.duration/60,km:Math.max(1,Math.round(rt.distance/1000))};
       show(cache[key]);
     }).catch(function(){
       if(cur!==key)return;
       draw([from,dest]);
-      setTime(fallbackT||'—',fallbackT?fallbackD:'Non riesco a calcolare il percorso adesso. Usa i bottoni del navigatore qui sotto.');
+      setTime(fallbackT?+fallbackT:'—',fallbackT?fallbackD:'Non riesco a calcolare il percorso adesso. Usa i bottoni del navigatore qui sotto.');
     });
   }
   function pick(c){
