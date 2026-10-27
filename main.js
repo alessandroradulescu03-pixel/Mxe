@@ -17,10 +17,10 @@
   // orari settimana tipo
   var names=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
   var full=['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
-  var chip={4:'9:30–17',5:'9–15',6:'9–16'};
-  var lng={4:'9:30 – 17:00',5:'9:00 – 15:00',6:'9:00 – 16:00'};
+  var chip={0:'9–17',2:'9–17',3:'9–17',4:'9–17',5:'9–17',6:'9–17'};
+  var lng={0:'9:00 – 17:00',2:'9:00 – 17:00',3:'9:00 – 17:00',4:'9:00 – 17:00',5:'9:00 – 17:00',6:'9:00 – 17:00'};
   var d=new Date().getDay();
-  function closed(n){return n===1||n===2}
+  function closed(n){return n===1}
 
   // scheda "oggi" in home
   var wk=document.getElementById('tdWeek');
@@ -32,8 +32,8 @@
     wk.innerHTML=html;
     document.getElementById('tdLab').textContent='Oggi · '+full[d];
     var st=document.getElementById('tdState'),tx=document.getElementById('tdText');
-    if(closed(d)){st.textContent='Chiusi';st.className='state x closed';tx.textContent='Si riapre mercoledì. Orari su Instagram la sera prima.';}
-    else{st.textContent='Aperti';st.className='state x open';tx.textContent=lng[d]?('Di solito '+lng[d]+'. Conferma su Instagram la sera prima.'):'Orari del giorno su Instagram la sera prima.';}
+    if(closed(d)){st.textContent='Chiusi';st.className='state x closed';tx.textContent='Si riapre domani, martedì, dalle 9:00.';}
+    else{st.textContent='Aperti';st.className='state x open';tx.textContent='Dalle '+lng[d]+'. Pioggia o gare? Guarda Instagram.';}
   }
 
   // giorno di oggi nella pagina orari
