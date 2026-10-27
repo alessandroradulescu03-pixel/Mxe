@@ -479,3 +479,29 @@ a.cc:hover{background:#1a44c4}
 .rules{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1000px){.rules{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:600px){.rules{grid-template-columns:1fr}}
+
+/* segnaposto foto pista */
+.tm-ph{aspect-ratio:756/740;max-width:100%;border:3px dashed #3a4250;display:grid;place-items:center;background:repeating-linear-gradient(-45deg,#141920 0 18px,#11151b 18px 36px)}
+.tm-ph span{font:900 italic clamp(20px,3vw,32px)/1.1 var(--wide);font-stretch:125%;text-transform:uppercase;color:#6c7484;text-align:center;padding:20px}
+
+/* tessere */
+.tess{background:var(--blue);color:#fff;position:relative;overflow:hidden}
+.tess::after{content:"";position:absolute;left:-10%;right:-10%;bottom:28px;height:14px;background:var(--red);transform:rotate(-3deg)}
+.tess .wrap{position:relative;z-index:1}
+.tess h2{color:#fff}
+.tess .sub{color:#dbe4ff;margin-bottom:0}
+.tess-head{display:flex;flex-wrap:wrap;gap:24px 40px;align-items:end;justify-content:space-between;margin-bottom:32px}
+.btn.wa{background:#25d366;color:#0b2a17}
+.btn.wa:hover{background:#fff;color:#0b2a17}
+.tess-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.tess-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.tess-grid{grid-template-columns:1fr}}
+.tcard{background:#fff;color:var(--ink);padding:22px 20px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
+.tname{font-size:clamp(34px,4vw,48px);line-height:.9;color:var(--blue)}
+.tfull{font-size:13px;color:var(--grey);min-height:2.6em}
+.tbtn{margin-top:8px;align-self:flex-start;background:var(--ink);color:#fff;text-decoration:none;padding:10px 16px;font:900 italic 14px var(--wide);font-stretch:110%;text-transform:uppercase;transform:skewX(-12deg);transition:background .2s}
+.tbtn i{font-style:normal;display:inline-block;transition:transform .2s}
+.tbtn:hover{background:#25d366;color:#0b2a17}
+.tbtn:hover i{transform:translateX(4px)}
+.tess-note{margin:18px 0 0;font-size:13px;color:#dbe4ff}
+.check a,.specs a{color:var(--blue);font-weight:700}
