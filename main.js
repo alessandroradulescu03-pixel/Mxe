@@ -211,3 +211,16 @@
   btns.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.c)})});
   pick(btns[0].dataset.c);
 })();
+
+// disegno pista: il bordo si disegna quando entra in vista
+(function(){
+  var f=document.querySelector('.trackmap');if(!f)return;
+  var e=f.querySelector('.tk-edge');
+  try{f.style.setProperty('--len',Math.ceil(e.getTotalLength()))}catch(x){}
+  if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  f.classList.add('pre-draw');
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){
+    if(en.isIntersecting){f.classList.remove('pre-draw');f.classList.add('drawn');io.disconnect()}
+  })},{threshold:.25});
+  io.observe(f);
+})();

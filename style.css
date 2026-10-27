@@ -374,3 +374,19 @@ a.cc:hover{background:#1a44c4}
 .nav-b:hover i.go{background:var(--white);transform:skewX(-12deg) translateX(4px)}
 .nav-b:hover i.go svg{fill:var(--blue);transform:skewX(12deg) translateX(3px)}
 @media (max-width:600px){.nav-b{padding-right:92px;min-height:100px}.nav-b i.go{width:50px;height:50px;margin-top:-25px;right:20px}}
+
+/* disegno del tracciato */
+.trackmap{margin:0;background:var(--ink);padding:18px;clip-path:polygon(0 0,calc(100% - 30px) 0,100% 30px,100% 100%,0 100%)}
+.trackmap svg{display:block;width:100%;height:auto;max-height:78vh}
+.trackmap .fence{fill:#141920;stroke:#2a303b;stroke-width:2;stroke-dasharray:5 5}
+.trackmap .tk-shadow{fill:#000;opacity:.45;transform:translate(3px,5px)}
+.trackmap .tk{fill:#c9cfdb;fill-rule:evenodd}
+.trackmap .tk-edge{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linejoin:round;stroke-dasharray:var(--len,6000);stroke-dashoffset:0}
+.js .trackmap.drawn .tk-edge{animation:edge 2.4s cubic-bezier(.4,0,.2,1) both}
+.js .trackmap .tk{transition:opacity .8s .6s}
+.js .trackmap.pre-draw .tk,.js .trackmap.pre-draw .tk-shadow{opacity:0}
+@keyframes edge{from{stroke-dashoffset:var(--len,6000)}to{stroke-dashoffset:0}}
+.trackmap .pad{fill:#1a1f28}
+.trackmap .padl{fill:#6c7484;font:800 15px var(--wide);font-stretch:62%;letter-spacing:.3em}
+.trackmap .startlab rect{fill:var(--red)}
+.trackmap .startlab text{fill:#fff;font:900 italic 12px var(--wide);font-stretch:110%}
