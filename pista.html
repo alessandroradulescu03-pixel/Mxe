@@ -6,62 +6,70 @@
 <title>La pista MXE.45</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Archivo:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="pista">
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="index.html" aria-label="MXE.45 home"><img src="logo.png" alt="MXE.45" width="102" height="30"></a>
+    <a href="index.html" aria-label="MXE.45 home"><img src="logo-dark.png" alt="MXE.45" width="102" height="30"></a>
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <ul>
-      <li><a data-p="home" href="index.html">Home</a></li>
-      <li><a data-p="orari" href="orari.html">Orari</a></li>
-      <li><a data-p="pista" href="pista.html">La pista</a></li>
-      <li><a data-p="info" href="info.html">Prima di venire</a></li>
-      <li><a data-p="dove" href="dove.html">Dove siamo</a></li>
+      <li><a data-p="home" href="index.html"><span>Home</span></a></li>
+      <li><a data-p="orari" href="orari.html"><span>Orari</span></a></li>
+      <li><a data-p="pista" href="pista.html"><span>La pista</span></a></li>
+      <li><a data-p="info" href="info.html"><span>Prima di venire</span></a></li>
+      <li><a data-p="dove" href="dove.html"><span>Dove siamo</span></a></li>
     </ul>
   </div>
 </header>
 <main>
-<section class="phead"><span class="big" aria-hidden="true">45</span><div class="wrap">
-  <div class="eyebrow">Covo · Bassa Bergamasca</div><h1>La pista</h1><p>Un tracciato in terra ripassato con trattore e livellatrice prima di ogni apertura.</p></div></section>
+<section class="phead" style="padding:0">
+  <div class="ghost x" aria-hidden="true">45</div>
+  <div class="livery" aria-hidden="true"><i class="b4"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+  <div class="wrap">
+    <div class="lab" style="color:var(--red)">Covo · Bassa Bergamasca</div>
+    <h1 class="x">La pista</h1>
+    <p>Un tracciato in terra ripassato con trattore e livellatrice prima di ogni apertura.</p>
+  </div>
+</section>
 <section><div class="wrap track">
   <svg class="rv" viewBox="0 0 520 360" role="img" aria-label="Schema indicativo del tracciato">
+    <path class="edge" d="M70 290 L190 300 C 250 305, 270 250, 230 220 C 190 190, 120 200, 100 150 C 80 100, 130 50, 200 60 L 360 70 C 440 80, 470 140, 430 180 C 400 210, 330 190, 320 240 C 310 290, 380 310, 450 290 C 490 280, 490 330, 440 330 L 90 330 C 40 330, 30 290, 70 290 Z"/>
     <path class="path" id="trk" d="M70 290 L190 300 C 250 305, 270 250, 230 220 C 190 190, 120 200, 100 150 C 80 100, 130 50, 200 60 L 360 70 C 440 80, 470 140, 430 180 C 400 210, 330 190, 320 240 C 310 290, 380 310, 450 290 C 490 280, 490 330, 440 330 L 90 330 C 40 330, 30 290, 70 290 Z"/>
     <path class="line" d="M70 290 L190 300 C 250 305, 270 250, 230 220 C 190 190, 120 200, 100 150 C 80 100, 130 50, 200 60 L 360 70 C 440 80, 470 140, 430 180 C 400 210, 330 190, 320 240 C 310 290, 380 310, 450 290 C 490 280, 490 330, 440 330 L 90 330 C 40 330, 30 290, 70 290 Z"/>
-    <rect class="jump" x="262" y="56" width="10" height="26" rx="2"/><rect class="jump" x="300" y="58" width="10" height="26" rx="2"/>
-    <rect class="jump" x="138" y="318" width="10" height="26" rx="2"/>
-    <circle r="10" fill="var(--plate)" stroke="#fff" stroke-width="3"><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#trk"/></animateMotion></circle>
-    <text x="250" y="40">salti</text><text x="40" y="270">partenza</text>
+    <rect class="jump" x="262" y="54" width="10" height="30"/><rect class="jump" x="300" y="56" width="10" height="30"/>
+    <rect class="jump" x="138" y="316" width="10" height="30"/>
+    <circle r="11" fill="var(--blue)" stroke="var(--white)" stroke-width="3"><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#trk"/></animateMotion></circle>
+    <text x="246" y="36">Salti</text><text x="30" y="268">Partenza</text>
   </svg>
   <div class="rv">
-    <div class="eyebrow">Scheda tecnica</div>
-    <h2>Il tracciato</h2>
+    <div class="lab" style="color:var(--blue)">Scheda tecnica</div>
+    <h2 class="x">Il tracciato</h2>
     <ul class="specs">
-      <li><span>Fondo</span><b>Terra</b></li>
-      <li><span>Lunghezza</span><b><span class="tbd">DA INSERIRE</span></b></li>
-      <li><span>Categorie</span><b>MX · Mini</b></li>
-      <li><span>Gare</span><b>Circuito UISP</b></li>
-      <li><span>Manutenzione</span><b>Prima di ogni apertura</b></li>
+      <li><span>Fondo</span><b class="x">Terra</b></li>
+      <li><span>Lunghezza</span><b><span class="tbd">Da inserire</span></b></li>
+      <li><span>Categorie</span><b class="x">MX · Mini</b></li>
+      <li><span>Gare</span><b class="x">UISP</b></li>
+      <li><span>Manutenzione</span><b class="x">A ogni apertura</b></li>
     </ul>
-    <p style="color:var(--mute);font-size:13px;margin-top:14px">Lo schema è indicativo: va sostituito con il disegno reale del tracciato.</p>
+    <p style="color:var(--grey);font-size:13px;margin-top:14px">Schema indicativo: va sostituito con il disegno reale del tracciato.</p>
   </div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
-  <div class="eyebrow rv">Cosa si fa qui</div><h2 class="rv">Tre modi di girare</h2>
-  <div class="acts rv">
-    <article class="act"><span class="n">Motocross</span><h3>Giro libero</h3><p>Accesso giornaliero per amatori ed esperti, negli orari pubblicati.</p></article>
-    <article class="act"><span class="n">Minicross</span><h3>Turni mini</h3><p>Turni riservati ai più piccoli, senza le moto grandi in pista.</p></article>
-    <article class="act"><span class="n">Gare</span><h3>UISP</h3><p>Gare del circuito UISP. Nei giorni di gara il giro libero è sospeso.</p></article>
+  <div class="lab" style="color:var(--blue)">Cosa si fa qui</div><h2 class="x">Scegli il tuo turno</h2>
+  <div class="panels rv">
+    <div class="panel"><span class="stripe"></span><span class="no x" aria-hidden="true">01</span><div class="lab">Motocross</div><h3 class="x">Giro libero</h3><p>Accesso giornaliero per amatori ed esperti, negli orari pubblicati.</p></div>
+    <div class="panel"><span class="stripe"></span><span class="no x" aria-hidden="true">02</span><div class="lab">Minicross</div><h3 class="x">Turni mini</h3><p>Turni riservati ai più piccoli, senza le moto grandi in pista.</p></div>
+    <div class="panel"><span class="stripe"></span><span class="no x" aria-hidden="true">03</span><div class="lab">Gare</div><h3 class="x">UISP</h3><p>Gare del circuito UISP. Nei giorni di gara il giro libero è sospeso.</p></div>
   </div>
 </div></section>
 </main>
-<footer class="foot">
+<footer>
   <div class="wrap">
-    <div><img src="logo.png" alt="MXE.45" width="89" height="26"><p style="margin:0;max-width:34ch">Pista motocross a Covo, nella Bassa Bergamasca. Motocross, minicross, gare UISP e area drift.</p></div>
-    <div><h4>Pagine</h4><ul><li><a href="orari.html">Orari</a></li><li><a href="pista.html">La pista</a></li><li><a href="info.html">Prima di venire</a></li><li><a href="dove.html">Dove siamo</a></li></ul></div>
-    <div><h4>Seguici</h4><ul><li><a href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">Instagram @mxe.45</a></li><li>GQ3R+HC Covo (BG)</li><li>Lun · Mar chiuso</li></ul></div>
+    <img src="logo-dark.png" alt="MXE.45" width="82" height="24">
+    <div class="links"><a href="orari.html">Orari</a><a href="pista.html">La pista</a><a href="info.html">Prima di venire</a><a href="dove.html">Dove siamo</a><a href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">Instagram @mxe.45</a></div>
+    <span>Covo (BG) · Lun e Mar chiuso</span>
   </div>
 </footer>
 <script src="main.js"></script>

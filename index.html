@@ -6,75 +6,98 @@
 <title>MXE.45 Covo</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Archivo:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="home">
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="index.html" aria-label="MXE.45 home"><img src="logo.png" alt="MXE.45" width="102" height="30"></a>
+    <a href="index.html" aria-label="MXE.45 home"><img src="logo-dark.png" alt="MXE.45" width="102" height="30"></a>
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <ul>
-      <li><a data-p="home" href="index.html">Home</a></li>
-      <li><a data-p="orari" href="orari.html">Orari</a></li>
-      <li><a data-p="pista" href="pista.html">La pista</a></li>
-      <li><a data-p="info" href="info.html">Prima di venire</a></li>
-      <li><a data-p="dove" href="dove.html">Dove siamo</a></li>
+      <li><a data-p="home" href="index.html"><span>Home</span></a></li>
+      <li><a data-p="orari" href="orari.html"><span>Orari</span></a></li>
+      <li><a data-p="pista" href="pista.html"><span>La pista</span></a></li>
+      <li><a data-p="info" href="info.html"><span>Prima di venire</span></a></li>
+      <li><a data-p="dove" href="dove.html"><span>Dove siamo</span></a></li>
     </ul>
   </div>
 </header>
 <main>
 <section class="hero" style="padding:0">
-  
+  <div class="ghost x" aria-hidden="true">45</div>
+  <div class="livery" aria-hidden="true"><i class="b4"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
   <div class="wrap">
     <div>
-      <div class="eyebrow">Pista motocross · Covo (BG)</div>
-      <h1><span class="l"><span>Gas a</span></span><span class="l"><span>martello</span></span><span class="l"><span>nella Bassa</span></span></h1>
-      <p class="lead">Motocross, turni minicross, gare UISP e area drift. Apriamo dal mercoledì alla domenica e gli orari del giorno dopo escono sempre su Instagram.</p>
-      <div class="cta"><a class="btn" href="orari.html">Vedi gli orari <span class="arr">→</span></a><a class="btn ghost" href="dove.html">Come arrivare</a></div>
+      <div class="lab" style="color:var(--red)">Pista motocross · Covo (BG)</div>
+      <h1 class="x"><span>Terra,</span><span>salti e</span><span><em>gas aperto</em></span></h1>
+      <p class="lead">Giro libero, turni minicross e gare UISP nella Bassa Bergamasca. Siamo aperti dal mercoledì alla domenica.</p>
+      <div class="btns">
+        <a class="btn" href="orari.html"><span>Orari della settimana</span></a>
+        <a class="btn alt" href="dove.html"><span>Come arrivare</span></a>
+      </div>
     </div>
-    <div class="plate" aria-hidden="true"><b>45</b><span class="sw"></span><small>COVO · BG</small></div>
+    <aside class="today" aria-live="polite">
+      <div class="lab" id="tdLab">Oggi</div>
+      <div class="state x" id="tdState">Aperti</div>
+      <p id="tdText">Orari del giorno su Instagram.</p>
+      <ol id="tdWeek"></ol>
+    </aside>
   </div>
 </section>
-<div class="status"><div class="wrap">
-  <span class="pill" id="oggi"><span class="dot"></span>Mer → Dom aperti</span>
-  <span class="pill off"><span class="dot"></span>Lun · Mar chiuso</span>
-  <span>Con la pioggia si chiude: guarda le storie prima di partire.</span>
+
+<div class="nums" aria-hidden="true"><div class="x">
+  <span>#45</span><span>#12</span><span>#7</span><span>#23</span><span>#91</span><span>#3</span><span>#66</span><span>#18</span><span>#222</span><span>#5</span>
+  <span>#45</span><span>#12</span><span>#7</span><span>#23</span><span>#91</span><span>#3</span><span>#66</span><span>#18</span><span>#222</span><span>#5</span>
 </div></div>
-<section><div class="wrap">
-  <div class="eyebrow rv">Il sito</div>
-  <h2 class="rv">Tutto quello che serve<br>prima di caricare la moto</h2>
-  <div class="tiles rv">
-    <a class="tile" href="orari.html"><span class="n">ORARI</span><h3>Quando<br>si gira</h3><p>Settimana tipo, giorni di gara e chiusure.</p><span class="go">Apri →</span></a>
-    <a class="tile" href="pista.html"><span class="n">PISTA</span><h3>Il<br>tracciato</h3><p>Motocross, minicross e gare UISP.</p><span class="go">Apri →</span></a>
-    <a class="tile" href="info.html"><span class="n">INFO</span><h3>Prima di<br>venire</h3><p>Cosa portare, ingressi e domande frequenti.</p><span class="go">Apri →</span></a>
-    <a class="tile" href="dove.html"><span class="n">MAPPA</span><h3>Dove<br>siamo</h3><p>Il codice da cercare su Google Maps.</p><span class="go">Apri →</span></a>
-  </div>
-</div></section>
-<div class="ticker" aria-hidden="true"><div><span>Lun · Mar chiuso</span><i>✦</i><span>Mer → Dom aperti</span><i>✦</i><span>Gare UISP</span><i>✦</i><span>Turni mini</span><i>✦</i><span>Mery Drift</span><i>✦</i><span>Covo · BG</span><i>✦</i><span>Lun · Mar chiuso</span><i>✦</i><span>Mer → Dom aperti</span><i>✦</i><span>Gare UISP</span><i>✦</i><span>Turni mini</span><i>✦</i><span>Mery Drift</span><i>✦</i><span>Covo · BG</span><i>✦</i></div></div>
-<section class="drift"><div class="wrap">
-  <div class="rv">
-    <div class="eyebrow">Nella stessa struttura</div>
-    <h2>Mery Drift</h2>
-    <p class="sub">L'area drift a forma di 8: scuola con istruttori, noleggio auto e noleggio pista.</p>
-    <a class="btn ghost" href="#">Scopri Mery Drift <span class="arr">→</span></a>
-  </div>
-  <svg class="rv" viewBox="0 0 460 260" role="img" aria-label="Pista a forma di 8">
-    <path d="M230 130 C 300 40, 430 40, 430 130 C 430 220, 300 220, 230 130 C 160 40, 30 40, 30 130 C 30 220, 160 220, 230 130 Z" fill="none" stroke="var(--dirt-3)" stroke-width="34"/>
-    <path id="eight" d="M230 130 C 300 40, 430 40, 430 130 C 430 220, 300 220, 230 130 C 160 40, 30 40, 30 130 C 30 220, 160 220, 230 130 Z" fill="none" stroke="var(--plate-hi)" stroke-width="2" stroke-dasharray="8 8"/>
-    <circle r="9" fill="var(--red)"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#eight"/></animateMotion></circle>
-  </svg>
-</div></section>
-<section><div class="wrap" style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
-  <h2 class="rv" style="margin:0">Ci vediamo in pista</h2>
-  <div class="cta rv"><a class="btn" href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">Seguici su Instagram</a><a class="btn ghost" href="dove.html">Come arrivare</a></div>
-</div></section>
-</main>
-<footer class="foot">
+
+<section>
   <div class="wrap">
-    <div><img src="logo.png" alt="MXE.45" width="89" height="26"><p style="margin:0;max-width:34ch">Pista motocross a Covo, nella Bassa Bergamasca. Motocross, minicross, gare UISP e area drift.</p></div>
-    <div><h4>Pagine</h4><ul><li><a href="orari.html">Orari</a></li><li><a href="pista.html">La pista</a></li><li><a href="info.html">Prima di venire</a></li><li><a href="dove.html">Dove siamo</a></li></ul></div>
-    <div><h4>Seguici</h4><ul><li><a href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">Instagram @mxe.45</a></li><li>GQ3R+HC Covo (BG)</li><li>Lun · Mar chiuso</li></ul></div>
+    <div class="lab" style="color:var(--blue)">Cosa si fa qui</div>
+    <h2 class="x">Scegli il tuo turno</h2>
+    <p class="sub">Un tracciato in terra ripassato con trattore e livellatrice prima di ogni apertura.</p>
+    <div class="panels rv">
+      <a class="panel" href="pista.html"><span class="stripe"></span><span class="no x" aria-hidden="true">01</span><div class="lab">Motocross</div><h3 class="x">Giro libero</h3><p>Per amatori ed esperti, negli orari pubblicati ogni giorno.</p></a>
+      <a class="panel" href="pista.html"><span class="stripe"></span><span class="no x" aria-hidden="true">02</span><div class="lab">Minicross</div><h3 class="x">Turni mini</h3><p>Il sabato, turni solo per i piccoli senza le moto grandi in pista.</p></a>
+      <a class="panel" href="pista.html"><span class="stripe"></span><span class="no x" aria-hidden="true">03</span><div class="lab">Gare</div><h3 class="x">UISP</h3><p>Nei giorni di gara la pista è riservata ai partecipanti.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="md">
+  <div class="wrap">
+    <div>
+      <div class="lab">Nella stessa struttura</div>
+      <h2 class="x">Mery Drift</h2>
+    </div>
+    <a class="btn" href="#"><span>Vai al sito</span></a>
+  </div>
+</section>
+
+<section>
+  <div class="wrap where">
+    <div>
+      <div class="lab" style="color:var(--blue)">Dove siamo</div>
+      <h2 class="x">Covo, Bergamo</h2>
+      <p class="sub">La pista non ha un civico. Apri la mappa e arrivi dritto all'ingresso.</p>
+      <a class="btn" href="dove.html"><span>Come arrivare</span></a>
+    </div>
+    <ul class="km rv">
+      <li><span>da Treviglio</span><b class="x">~25'</b></li>
+      <li><span>da Bergamo</span><b class="x">~30'</b></li>
+      <li><span>da Brescia</span><b class="x">~40'</b></li>
+      <li><span>da Milano</span><b class="x">~50'</b></li>
+    </ul>
+  </div>
+</section>
+
+
+</main>
+<footer>
+  <div class="wrap">
+    <img src="logo-dark.png" alt="MXE.45" width="82" height="24">
+    <div class="links"><a href="orari.html">Orari</a><a href="pista.html">La pista</a><a href="info.html">Prima di venire</a><a href="dove.html">Dove siamo</a><a href="https://www.instagram.com/mxe.45/" target="_blank" rel="noopener">Instagram @mxe.45</a></div>
+    <span>Covo (BG) · Lun e Mar chiuso</span>
   </div>
 </footer>
 <script src="main.js"></script>
