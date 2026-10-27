@@ -52,8 +52,8 @@
   // copia codice Google Maps
   var cp=document.getElementById('copy');
   if(cp)cp.addEventListener('click',function(){
-    var txt='GQ3R+HC Covo, Provincia di Bergamo';
-    var lbl=cp.querySelector('span')||cp;function ok(){lbl.textContent='Copiato ✓';setTimeout(function(){lbl.textContent='Copia'},1800)}
+    var txt='MXE.45, SP102, 24050 Covo (BG)';
+    var lbl=cp.querySelector('span')||cp;var o0=lbl.textContent;function ok(){lbl.textContent='Copiato ✓';setTimeout(function(){lbl.textContent=o0},1800)}
     function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('pc'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
     try{navigator.clipboard.writeText(txt).then(ok,sel)}catch(e){sel()}
   });

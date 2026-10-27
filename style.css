@@ -295,3 +295,16 @@ a.cc:hover{background:#1a44c4}
   .pin .pn{font-size:40px}
   .maplab{position:static;display:block;padding:8px 12px}
 }
+
+/* fatti in home */
+.facts{background:var(--white);border-top:3px solid var(--ink)}
+.facts .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+@media (max-width:760px){.facts .wrap{grid-template-columns:1fr}}
+.fact{display:flex;flex-direction:column;gap:4px;padding:26px 24px 24px 0;min-width:0}
+.fact+.fact{border-left:1px solid #d5d9e0;padding-left:24px}
+@media (max-width:760px){.fact+.fact{border-left:0;border-top:1px solid #d5d9e0;padding-left:0}}
+.fact b{font-size:clamp(28px,3.4vw,42px);line-height:1;color:var(--blue)}
+.fact b small{font-size:.5em;color:var(--grey)}
+.fact span{color:var(--grey)}
+.cc .sel{user-select:all}
+.cc .mini{color:#fff;font-weight:800;text-decoration:underline;font-size:14px}
