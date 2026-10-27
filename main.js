@@ -198,7 +198,14 @@
       msg.textContent='Cerco la tua posizione…';
       navigator.geolocation.getCurrentPosition(function(p){
         custom('La tua posizione',[p.coords.latitude,p.coords.longitude]);
-      },function(){msg.textContent='Posizione non disponibile. Scrivi il tuo paese qui sopra.'},{timeout:10000});
+      },function(err){
+        var t={
+          1:'Hai bloccato la posizione per questo sito. Riattivala dalle impostazioni del browser, oppure scrivi il tuo paese qui sopra.',
+          2:'Il dispositivo non riesce a trovare la posizione. Controlla che la localizzazione sia attiva, oppure scrivi il tuo paese qui sopra.',
+          3:'Ci sta mettendo troppo a trovare la posizione. Riprova, oppure scrivi il tuo paese qui sopra.'
+        };
+        msg.textContent=t[err&&err.code]||'Posizione non disponibile. Scrivi il tuo paese qui sopra.';
+      },{enableHighAccuracy:false,timeout:20000,maximumAge:300000});
     });
   }
   btns.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.c)})});
