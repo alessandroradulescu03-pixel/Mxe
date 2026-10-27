@@ -431,3 +431,48 @@ a.cc:hover{background:#1a44c4}
 .trackmap .tk-edge{stroke-width:5;stroke:var(--blue)}
 .trackmap .startlab text{font-size:26px}
 .trackmap figcaption{color:#9aa3b5;font-size:13px;padding:10px 4px 2px}
+
+/* foto pista */
+.trackmap.photo{padding:10px;clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,0 100%)}
+.tm-wrap{position:relative;line-height:0}
+.tm-wrap img{display:block;width:100%;height:auto}
+.tm-start{position:absolute;transform:translate(-50%,-50%) skewX(-12deg);background:var(--red);color:#fff;padding:7px 14px;font:900 italic clamp(12px,1.6vw,16px)/1 var(--wide);font-stretch:110%;text-transform:uppercase;box-shadow:0 6px 18px rgba(0,0,0,.45);line-height:1}
+
+/* meteo a tutta larghezza (Orari) */
+.meteo-sec .meteo{max-width:none}
+@media (min-width:900px){
+  .meteo.wide{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);column-gap:40px;row-gap:12px;padding:28px 32px 18px;align-items:start}
+  .meteo.wide .m-head{grid-column:1;grid-row:1}
+  .meteo.wide .m-row{grid-column:1;grid-row:2}
+  .meteo.wide .m-track{grid-column:1;grid-row:3}
+  .meteo.wide .m-fc-head{grid-column:2;grid-row:1}
+  .meteo.wide .m-days{grid-column:2;grid-row:2 / span 2;gap:8px}
+  .meteo.wide .m-src{grid-column:1 / -1;grid-row:4}
+  .meteo.wide .m-temp{font-size:80px}
+  .meteo.wide .m-ico svg{width:72px;height:72px}
+  .meteo.wide .m-days li{padding:16px 6px 12px;gap:6px}
+  .meteo.wide .m-days svg{width:44px;height:44px}
+  .meteo.wide .m-days b{font-size:22px}
+  .meteo.wide .m-days li .lab{font-size:13px}
+  .meteo.wide .m-p{font-size:13px}
+}
+
+/* ritocchi telefono */
+@media (max-width:860px){
+  .hero .wrap{padding-bottom:150px}
+  .phead .wrap{padding-block:44px 90px}
+  section{padding-block:64px}
+}
+@media (max-width:600px){
+  .cities{grid-template-columns:1fr 1fr}
+  .cbtn{flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px}
+  .cbtn .cn{font-size:17px}
+  .cbtn .ct{font-size:13px}
+  .readout .time b{font-size:56px}
+  .today ol{gap:3px}
+  .today li{font-size:12px}
+  .today li b{font-size:10px}
+  .meteo{padding:18px 16px 12px}
+  .m-days li{padding:8px 2px 6px}
+  .nav-b .x{font-size:22px}
+}

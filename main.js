@@ -215,7 +215,7 @@
 // disegno pista: il bordo si disegna quando entra in vista
 (function(){
   var f=document.querySelector('.trackmap');if(!f)return;
-  var e=f.querySelector('.tk-edge');
+  var e=f.querySelector('.tk-edge');if(!e)return;
   try{f.style.setProperty('--len',Math.ceil(e.getTotalLength()))}catch(x){}
   if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
   f.classList.add('pre-draw');
