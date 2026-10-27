@@ -59,39 +59,71 @@
   });
 })();
 
-// mappa "Dove siamo"
+// mappa "Dove siamo" — mappa reale (OpenStreetMap/CARTO) e percorso reale (OSRM)
 (function(){
   var btns=[].slice.call(document.querySelectorAll('.cbtn'));
-  if(!btns.length)return;
-  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var rider=document.querySelector('.rider'),ro=document.querySelector('.readout'),raf;
-  document.querySelectorAll('.route').forEach(function(p){p.style.setProperty('--len',Math.ceil(p.getTotalLength()))});
-  function ride(path){
-    cancelAnimationFrame(raf);
-    var L=path.getTotalLength(),t0=null,dur=1100;
-    if(reduce){var e=path.getPointAtLength(L);rider.setAttribute('cx',e.x);rider.setAttribute('cy',e.y);rider.style.opacity=0;return}
-    rider.style.opacity=1;
-    function step(ts){
-      if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
-      var p=path.getPointAtLength(L*k);rider.setAttribute('cx',p.x);rider.setAttribute('cy',p.y);
-      if(k<1)raf=requestAnimationFrame(step);else rider.style.opacity=0;
-    }
-    raf=requestAnimationFrame(step);
-  }
-  function pick(c){
-    btns.forEach(function(b){b.classList.toggle('on',b.dataset.c===c)});
-    document.querySelectorAll('.city').forEach(function(g){g.classList.toggle('on',g.dataset.c===c)});
-    document.querySelectorAll('.route').forEach(function(p){
-      p.classList.remove('on');
-      if(p.dataset.c===c){void p.getBoundingClientRect();p.classList.add('on');ride(p)}
+  var el=document.getElementById('map');
+  if(!btns.length||!el)return;
+  var ro=document.querySelector('.readout');
+  var dest=[+el.dataset.lat,+el.dataset.lon];
+  var map=null,line=null,startDot=null,cache={},cur=null;
+
+  if(window.L){
+    map=L.map(el,{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView(dest,10);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+      maxZoom:18,subdomains:'abcd',
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+    map.attributionControl.setPrefix(false);
+    var pin=L.divIcon({className:'mxpin',html:'<span class="r"></span><span class="r r2"></span><b>45</b><i></i>',iconSize:[60,80],iconAnchor:[30,74]});
+    L.marker(dest,{icon:pin,zIndexOffset:1000,title:'MXE.45'}).addTo(map);
+    btns.forEach(function(b){
+      var ll=b.dataset.ll.split(',').map(Number);
+      L.circleMarker(ll,{radius:6,color:'#9aa3b5',weight:3,fillColor:'#141920',fillOpacity:1})
+        .addTo(map).bindTooltip(b.querySelector('.cn').textContent,{permanent:true,direction:'top',className:'ctip',offset:[0,-8]})
+        .on('click',function(){pick(b.dataset.c)});
     });
+  }else{
+    el.innerHTML='<p class="nomap">Mappa non disponibile qui. Usa i bottoni del navigatore qui sotto.</p>';
+  }
+
+  function draw(coords){
+    if(line)map.removeLayer(line);
+    line=L.polyline(coords,{color:'#1f4fe0',weight:6,opacity:1,lineCap:'round',className:'mxroute'}).addTo(map);
+    map.fitBounds(line.getBounds(),{padding:[60,60],animate:false});
+    var p=line.getElement&&line.getElement();
+    if(p&&p.getTotalLength){
+      var L0=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=L0;p.style.strokeDashoffset=L0;p.getBoundingClientRect();
+      p.style.transition='stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';p.style.strokeDashoffset=0;
+      setTimeout(function(){p.style.transition='none';p.style.strokeDasharray='';p.style.strokeDashoffset=''},1300);
+    }
+  }
+  function setTime(t,txt){document.getElementById('roTime').textContent=t;if(txt)document.getElementById('roText').textContent=txt}
+
+  function pick(c){
+    cur=c;
     var b=btns.filter(function(x){return x.dataset.c===c})[0];
+    btns.forEach(function(x){x.classList.toggle('on',x===b)});
     document.getElementById('roFrom').textContent=b.querySelector('.cn').textContent;
-    document.getElementById('roTime').textContent=b.dataset.t;
-    document.getElementById('roText').textContent=b.dataset.d;
+    setTime(b.dataset.t,b.dataset.d);
     ro.classList.remove('flash');void ro.offsetWidth;ro.classList.add('flash');
+    if(!map)return;
+    var from=b.dataset.ll.split(',').map(Number);
+    if(startDot)map.removeLayer(startDot);
+    startDot=L.circleMarker(from,{radius:8,color:'#fff',weight:3,fillColor:'#1f4fe0',fillOpacity:1}).addTo(map);
+    function show(r){
+      if(cur!==c)return;
+      draw(r.coords);
+      setTime("~"+r.min+"'",r.km+' km in auto, percorso più veloce.');
+    }
+    if(cache[c])return show(cache[c]);
+    var url='https://router.project-osrm.org/route/v1/driving/'+from[1]+','+from[0]+';'+dest[1]+','+dest[0]+'?overview=full&geometries=geojson';
+    fetch(url).then(function(r){return r.json()}).then(function(d){
+      var rt=d.routes[0];
+      cache[c]={coords:rt.geometry.coordinates.map(function(p){return[p[1],p[0]]}),min:Math.round(rt.duration/60/5)*5||Math.round(rt.duration/60),km:Math.round(rt.distance/1000)};
+      show(cache[c]);
+    }).catch(function(){ if(cur===c) draw([from,dest]); });
   }
   btns.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.c)})});
-  document.querySelectorAll('.city').forEach(function(g){g.addEventListener('click',function(){pick(g.dataset.c)})});
   pick(btns[0].dataset.c);
 })();
