@@ -343,3 +343,17 @@ a.cc:hover{background:#1a44c4}
 .dark .panel p{color:#9aa3b5}
 .dark .panel .no{color:#232a35}
 .dark .panel:nth-child(3) .stripe{background:var(--white)}
+
+.today .state.soon{color:#ffc65c}
+
+/* casella "da dove parti" */
+.from-form{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.from-row{display:flex;gap:6px}
+.from-row input{flex:1;min-width:0;background:#1a1f28;color:#fff;border:2px solid #2a303b;padding:13px 14px;font:600 16px var(--wide)}
+.from-row input::placeholder{color:#6c7484}
+.from-row input:focus{outline:none;border-color:var(--blue)}
+.from-row button{background:var(--blue);color:#fff;border:0;padding:0 20px;cursor:pointer;font:900 italic 16px var(--wide);font-stretch:125%;text-transform:uppercase;transform:skewX(-12deg)}
+.from-row button:hover{background:#3a66ff}
+.geo{align-self:flex-start;background:none;border:0;padding:4px 0;color:#9ab3ff;cursor:pointer;font:700 14px var(--wide);text-decoration:underline}
+.geo:hover{color:#fff}
+.from-msg{margin:0;min-height:1.2em;font-size:14px;color:#ffc65c}

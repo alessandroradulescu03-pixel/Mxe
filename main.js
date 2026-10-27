@@ -19,22 +19,44 @@
   var full=['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
   var chip={0:'9–17',2:'9–17',3:'9–17',4:'9–17',5:'9–17',6:'9–17'};
   var lng={0:'9:00 – 17:00',2:'9:00 – 17:00',3:'9:00 – 17:00',4:'9:00 – 17:00',5:'9:00 – 17:00',6:'9:00 – 17:00'};
-  var d=new Date().getDay();
+  // ora di Covo (Europe/Rome), indipendente dal fuso di chi visita
+  function romeNow(){
+    try{
+      var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false})
+        .formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});
+      return {d:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),m:(+p.hour%24)*60+(+p.minute)};
+    }catch(e){var n=new Date();return {d:n.getDay(),m:n.getHours()*60+n.getMinutes()}}
+  }
+  var OPEN=9*60,CLOSE=17*60;
   function closed(n){return n===1}
+  var d=romeNow().d;
 
-  // scheda "oggi" in home
+  // scheda "oggi" in home: aperto/chiuso in base al giorno E all'ora
   var wk=document.getElementById('tdWeek');
-  if(wk){
+  function nextOpen(day){ // primo giorno di apertura dopo "day"
+    for(var i=1;i<=7;i++){var n=(day+i)%7;if(!closed(n))return {n:n,i:i}}
+  }
+  function status(){
+    var now=romeNow(),st=document.getElementById('tdState'),tx=document.getElementById('tdText');
+    document.getElementById('tdLab').textContent='Oggi · '+full[now.d];
     var html='';
     [1,2,3,4,5,6,0].forEach(function(n){
-      html+='<li class="'+(closed(n)?'c':'')+(n===d?' now':'')+'">'+names[n]+'<b>'+(closed(n)?'chiuso':(chip[n]||'IG'))+'</b></li>';
+      html+='<li class="'+(closed(n)?'c':'')+(n===now.d?' now':'')+'">'+names[n]+'<b>'+(closed(n)?'chiuso':chip[n])+'</b></li>';
     });
     wk.innerHTML=html;
-    document.getElementById('tdLab').textContent='Oggi · '+full[d];
-    var st=document.getElementById('tdState'),tx=document.getElementById('tdText');
-    if(closed(d)){st.textContent='Chiusi';st.className='state x closed';tx.textContent='Si riapre domani, martedì, dalle 9:00.';}
-    else{st.textContent='Aperti';st.className='state x open';tx.textContent='Dalle '+lng[d]+'. Pioggia o gare? Guarda Instagram.';}
+    function set(word,cls,text){st.textContent=word;st.className='state x '+cls;tx.textContent=text}
+    if(!closed(now.d)&&now.m>=OPEN&&now.m<CLOSE){
+      var left=CLOSE-now.m;
+      if(left<=60)set('Aperti','soon','Chiude tra '+left+' min, alle 17:00.');
+      else set('Aperti','open','Fino alle 17:00. Pioggia o gare? Guarda Instagram.');
+    }else if(!closed(now.d)&&now.m<OPEN){
+      set('Chiusi','closed','Apre oggi alle 9:00.');
+    }else{
+      var nx=nextOpen(now.d);
+      set('Chiusi','closed','Riapre '+(nx.i===1?'domani, '+full[nx.n]:full[nx.n])+', alle 9:00.');
+    }
   }
+  if(wk){status();setInterval(status,30000);}
 
   // giorno di oggi nella pagina orari
   var t=document.querySelector('.day[data-d="'+d+'"]');if(t)t.classList.add('now');
@@ -100,29 +122,64 @@
   }
   function setTime(t,txt){document.getElementById('roTime').textContent=t;if(txt)document.getElementById('roText').textContent=txt}
 
-  function pick(c){
-    cur=c;
-    var b=btns.filter(function(x){return x.dataset.c===c})[0];
-    btns.forEach(function(x){x.classList.toggle('on',x===b)});
-    document.getElementById('roFrom').textContent=b.querySelector('.cn').textContent;
-    setTime(b.dataset.t,b.dataset.d);
-    ro.classList.remove('flash');void ro.offsetWidth;ro.classList.add('flash');
+  function flash(){ro.classList.remove('flash');void ro.offsetWidth;ro.classList.add('flash')}
+  // calcola e disegna il percorso da "from" [lat,lon] alla pista
+  function routeFrom(key,label,from,fallbackT,fallbackD){
+    cur=key;
+    document.getElementById('roFrom').textContent=label;
+    setTime(fallbackT||'…',fallbackD||'Calcolo il percorso…');
+    flash();
     if(!map)return;
-    var from=b.dataset.ll.split(',').map(Number);
     if(startDot)map.removeLayer(startDot);
     startDot=L.circleMarker(from,{radius:8,color:'#fff',weight:3,fillColor:'#1f4fe0',fillOpacity:1}).addTo(map);
     function show(r){
-      if(cur!==c)return;
+      if(cur!==key)return;
       draw(r.coords);
       setTime("~"+r.min+"'",r.km+' km in auto, percorso più veloce.');
     }
-    if(cache[c])return show(cache[c]);
+    if(cache[key])return show(cache[key]);
     var url='https://router.project-osrm.org/route/v1/driving/'+from[1]+','+from[0]+';'+dest[1]+','+dest[0]+'?overview=full&geometries=geojson';
     fetch(url).then(function(r){return r.json()}).then(function(d){
-      var rt=d.routes[0];
-      cache[c]={coords:rt.geometry.coordinates.map(function(p){return[p[1],p[0]]}),min:Math.round(rt.duration/60/5)*5||Math.round(rt.duration/60),km:Math.round(rt.distance/1000)};
-      show(cache[c]);
-    }).catch(function(){ if(cur===c) draw([from,dest]); });
+      var rt=d.routes[0],m=Math.round(rt.duration/60);
+      cache[key]={coords:rt.geometry.coordinates.map(function(p){return[p[1],p[0]]}),min:m>=20?Math.round(m/5)*5:Math.max(1,m),km:Math.max(1,Math.round(rt.distance/1000))};
+      show(cache[key]);
+    }).catch(function(){
+      if(cur!==key)return;
+      draw([from,dest]);
+      setTime(fallbackT||'—',fallbackT?fallbackD:'Non riesco a calcolare il percorso adesso. Usa i bottoni del navigatore qui sotto.');
+    });
+  }
+  function pick(c){
+    var b=btns.filter(function(x){return x.dataset.c===c})[0];
+    btns.forEach(function(x){x.classList.toggle('on',x===b)});
+    routeFrom(c,b.querySelector('.cn').textContent,b.dataset.ll.split(',').map(Number),b.dataset.t,b.dataset.d);
+  }
+  // casella "da dove parti"
+  var form=document.getElementById('fromForm'),inp=document.getElementById('fromInput'),msg=document.getElementById('fromMsg'),geo=document.getElementById('geoBtn');
+  function custom(label,ll){
+    btns.forEach(function(x){x.classList.remove('on')});
+    msg.textContent='';
+    routeFrom('q:'+ll.join(','),label,ll);
+  }
+  if(form)form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var q=inp.value.trim();if(!q)return;
+    msg.textContent='Cerco “'+q+'”…';
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=it&accept-language=it&q='+encodeURIComponent(q))
+      .then(function(r){return r.json()}).then(function(res){
+        if(!res.length){msg.textContent='Non trovo “'+q+'”. Prova con paese e provincia, es. “Chiari BS”.';return}
+        var label=res[0].display_name.split(',')[0];
+        custom(label,[+res[0].lat,+res[0].lon]);
+      }).catch(function(){msg.textContent='Ricerca non disponibile adesso. Usa i bottoni del navigatore qui sotto.'});
+  });
+  if(geo){
+    if(!navigator.geolocation)geo.hidden=true;
+    geo.addEventListener('click',function(){
+      msg.textContent='Cerco la tua posizione…';
+      navigator.geolocation.getCurrentPosition(function(p){
+        custom('La tua posizione',[p.coords.latitude,p.coords.longitude]);
+      },function(){msg.textContent='Posizione non disponibile. Scrivi il tuo paese qui sopra.'},{timeout:10000});
+    });
   }
   btns.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.c)})});
   pick(btns[0].dataset.c);
