@@ -498,6 +498,7 @@ a.cc:hover{background:#1a44c4}
 @media (max-width:420px){.tess-grid{grid-template-columns:1fr}}
 .tcard{background:#fff;color:var(--ink);padding:22px 20px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
 .tname{font-size:clamp(34px,4vw,48px);line-height:.9;color:var(--blue)}
+.tname.long{font-size:clamp(26px,2.6vw,34px);overflow-wrap:anywhere}
 .tfull{font-size:13px;color:var(--grey);min-height:2.6em}
 .tbtn{margin-top:8px;align-self:flex-start;background:var(--ink);color:#fff;text-decoration:none;padding:10px 16px;font:900 italic 14px var(--wide);font-stretch:110%;text-transform:uppercase;transform:skewX(-12deg);transition:background .2s}
 .tbtn i{font-style:normal;display:inline-block;transition:transform .2s}
