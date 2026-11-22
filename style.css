@@ -95,6 +95,7 @@ h2{font-size:clamp(36px,5.6vw,68px);line-height:.92;margin:12px 0 18px;text-wrap
 .panel:nth-child(3) .stripe{background:var(--ink)}
 .panel h3{font-size:30px;line-height:1;margin:10px 0 10px;position:relative}
 .panel p{margin:0;color:var(--grey);position:relative;max-width:32ch}
+@media (max-width:420px){h2{font-size:clamp(26px,8vw,36px)}.panel h3{font-size:clamp(22px,7vw,30px)}}
 
 /* mery drift */
 .md{background:var(--blue);color:#fff;position:relative;overflow:hidden}
@@ -137,6 +138,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;
 .phead{position:relative;overflow:hidden;background:var(--white);border-bottom:3px solid var(--ink)}
 .phead .wrap{position:relative;padding-block:64px 120px}
 .phead h1{font-size:clamp(52px,10vw,132px);line-height:.86;margin:14px 0 16px}
+@media (max-width:420px){.phead h1{font-size:clamp(40px,12.5vw,52px)}}
 .phead p{color:var(--grey);font-size:18px;max-width:52ch;margin:0}
 .phead .ghost{top:auto;bottom:-6%;font-size:clamp(180px,30vw,420px)}
 .phead .livery .b1{top:auto;bottom:40px;height:46px}
