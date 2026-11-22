@@ -1,3 +1,45 @@
+// stato pista: orario normale + eccezioni decise dai proprietari (Supabase, area /admin)
+(function(){
+  // ⚠️ per ora il progetto Supabase è quello di Mery Drift: quando MXE avrà il suo cambia solo queste due righe
+  var SB_URL='https://dcjqhleaevdjijjdqovs.supabase.co';
+  var SB_KEY='sb_publishable_1Fhv9LdqgTjoqqBKdKYGIg_AONI8Flr'; // chiave pubblica: può stare nel sito
+  // orario normale (deve restare uguale a quello in admin.js)
+  var APRE='09:00',CHIUDE='17:00',CHIUSO_IL=[1]; // 1 = lunedì
+  var rows={};
+  function pad(n){return (n<10?'0':'')+n}
+  function oggi(){
+    try{var o={};new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit'})
+      .formatToParts(new Date()).forEach(function(x){o[x.type]=x.value});return o.year+'-'+o.month+'-'+o.day}
+    catch(e){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate())}
+  }
+  function parts(s){var p=s.split('-');return {y:+p[0],m:+p[1]-1,d:+p[2]}}
+  function dow(s){var p=parts(s);return new Date(p.y,p.m,p.d).getDay()}
+  function piu(s,n){var p=parts(s),d=new Date(p.y,p.m,p.d+n);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+  function hm(t){return String(t).slice(0,5)}
+  function min(t){var p=hm(t).split(':');return +p[0]*60+(+p[1])}
+  function txt(t){return hm(t).replace(/^0/,'')} // "09:00" -> "9:00"
+  // com'è un giorno: {aperto, apre, chiude (minuti), apreTxt, chiudeTxt, motivo, avviso, speciale}
+  function info(s){
+    var r=rows[s],normaleChiuso=CHIUSO_IL.indexOf(dow(s))>-1,a=APRE,c=CHIUDE;
+    var x={data:s,aperto:!normaleChiuso,motivo:'',avviso:r&&r.avviso||'',speciale:false};
+    if(r&&r.aperto){x.aperto=true;if(r.apre)a=r.apre;if(r.chiude)c=r.chiude;x.speciale=normaleChiuso||!!r.apre||!!r.chiude}
+    else if(r){x.aperto=false;x.motivo=r.motivo||'';x.speciale=!normaleChiuso||!!r.motivo}
+    x.apre=min(a);x.chiude=min(c);x.apreTxt=txt(a);x.chiudeTxt=txt(c);
+    return x;
+  }
+  var S=window.mxeStato={info:info,oggi:oggi,piu:piu,dow:dow,parts:parts,ok:false,errore:false};
+  function carica(){
+    var t=oggi();
+    fetch(SB_URL+'/rest/v1/stato_pista?select=data,aperto,apre,chiude,motivo,avviso&data=gte.'+t+'&data=lte.'+piu(t,45),
+      {headers:{apikey:SB_KEY},cache:'no-store'})
+      .then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})
+      .then(function(l){rows={};l.forEach(function(x){rows[x.data]=x});S.ok=true;S.errore=false;document.dispatchEvent(new Event('mxe-stato'))})
+      .catch(function(){S.errore=true;document.dispatchEvent(new Event('mxe-stato'))});
+  }
+  carica();setInterval(carica,5*60*1000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)carica()});
+})();
+
 (function(){
   document.documentElement.classList.add('js');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,39 +69,87 @@
       return {d:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),m:(+p.hour%24)*60+(+p.minute)};
     }catch(e){var n=new Date();return {d:n.getDay(),m:n.getHours()*60+n.getMinutes()}}
   }
-  var OPEN=9*60,CLOSE=17*60;
-  function closed(n){return n===1}
-  var d=romeNow().d;
+  var d=romeNow().d,ST=window.mxeStato;
 
-  // scheda "oggi" in home: aperto/chiuso in base al giorno E all'ora
+  // scheda "oggi" in home: orario normale + modifiche dei proprietari
   var wk=document.getElementById('tdWeek');
-  function nextOpen(day){ // primo giorno di apertura dopo "day"
-    for(var i=1;i<=7;i++){var n=(day+i)%7;if(!closed(n))return {n:n,i:i}}
+  function quando(s,i){ // "domani, lunedì" / "giovedì" / "sabato 5 dicembre"
+    var p=ST.parts(s),g=full[ST.dow(s)];
+    if(i===1)return 'domani, '+g;
+    if(i<7)return g;
+    return g+' '+p.d+' '+['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'][p.m];
   }
   function status(){
-    var now=romeNow(),st=document.getElementById('tdState'),tx=document.getElementById('tdText');
+    var now=romeNow(),t=ST.oggi(),x=ST.info(t),st=document.getElementById('tdState'),tx=document.getElementById('tdText');
     document.getElementById('tdLab').textContent='Oggi · '+full[now.d];
-    var html='';
+    // settimana: ogni giorno è il prossimo con quel nome (oggi compreso), così si vedono i prossimi 7 giorni
+    var html='',prossimi=[];
     [1,2,3,4,5,6,0].forEach(function(n){
-      html+='<li class="'+(closed(n)?'c':'')+(n===now.d?' now':'')+'">'+names[n]+'<b>'+(closed(n)?'chiuso':chip[n])+'</b></li>';
+      var off=(n-now.d+7)%7,s=ST.piu(t,off),g=ST.info(s);
+      var cls=(g.aperto?'':'c')+(off===0?' now':'')+(g.speciale?' sp':'');
+      var b=g.aperto?(g.speciale?g.apreTxt.replace(':00','')+'–'+g.chiudeTxt.replace(':00',''):chip[n]):'chiuso';
+      var tit=full[n]+' '+ST.parts(s).d+': '+(g.aperto?'aperti '+g.apreTxt+'–'+g.chiudeTxt:'chiusi'+(g.motivo?' · '+g.motivo:''));
+      html+='<li class="'+cls.trim()+'" title="'+tit.replace(/"/g,'&quot;')+'">'+names[n]+'<b>'+b+'</b></li>';
+      if(off>0&&g.speciale)prossimi.push({off:off,s:s,g:g});
     });
     wk.innerHTML=html;
     function set(word,cls,text){st.textContent=word;st.className='state x '+cls;tx.textContent=text}
-    if(!closed(now.d)&&now.m>=OPEN&&now.m<CLOSE){
-      var left=CLOSE-now.m;
-      if(left<=60)set('Aperti','soon','Chiude tra '+left+' min, alle 17:00.');
-      else set('Aperti','open','Fino alle 17:00. Pioggia o gare? Guarda Instagram.');
-    }else if(!closed(now.d)&&now.m<OPEN){
-      set('Chiusi','closed','Apre oggi alle 9:00.');
+    if(x.aperto&&now.m>=x.apre&&now.m<x.chiude){
+      var left=x.chiude-now.m;
+      if(left<=60)set('Aperti','soon','Chiude tra '+left+' min, alle '+x.chiudeTxt+'.');
+      else set('Aperti','open','Fino alle '+x.chiudeTxt+'.'+(x.speciale?' Orario speciale di oggi.':ST.errore?' Pioggia o gare? Guarda Instagram.':''));
+    }else if(x.aperto&&now.m<x.apre){
+      set('Chiusi','closed','Apre oggi alle '+x.apreTxt+'.'+(x.speciale?' Orario speciale.':''));
     }else{
-      var nx=nextOpen(now.d);
-      set('Chiusi','closed','Riapre '+(nx.i===1?'domani, '+full[nx.n]:full[nx.n])+', alle 9:00.');
+      var nx=null;
+      for(var i=1;i<=60;i++){var s=ST.piu(t,i),g=ST.info(s);if(g.aperto){nx={s:s,i:i,g:g};break}}
+      var perche=!x.aperto&&x.motivo?'Oggi: '+x.motivo+'. ':'';
+      set('Chiusi','closed',perche+(nx?'Riapre '+quando(nx.s,nx.i)+', alle '+nx.g.apreTxt+'.':'Riapertura: guarda Instagram.'));
     }
+    // avviso dei proprietari e prossima modifica all'orario
+    var note=document.getElementById('tdNote');
+    if(!note){note=document.createElement('div');note.id='tdNote';note.className='note';tx.parentNode.insertBefore(note,wk)}
+    note.textContent='';
+    if(x.avviso){var a=document.createElement('p');a.className='av';a.textContent='📢 '+x.avviso;note.appendChild(a)}
+    if(prossimi.length){
+      var p0=prossimi[0],q=document.createElement('p');q.className='nx';
+      q.textContent='⚠️ '+full[ST.dow(p0.s)].replace(/^./,function(c){return c.toUpperCase()})+' '+ST.parts(p0.s).d+': '+
+        (p0.g.aperto?'aperti '+p0.g.apreTxt+'–'+p0.g.chiudeTxt:'chiusi'+(p0.g.motivo?' · '+p0.g.motivo:''))+(p0.g.avviso?' — '+p0.g.avviso:'');
+      note.appendChild(q);
+    }
+    note.hidden=!note.childNodes.length;
   }
-  if(wk){status();setInterval(status,30000);}
+  if(wk){status();setInterval(status,30000);document.addEventListener('mxe-stato',status);}
 
   // giorno di oggi nella pagina orari
   var t=document.querySelector('.day[data-d="'+d+'"]');if(t)t.classList.add('now');
+
+  // pagina orari: cambi d'orario e avvisi dei prossimi giorni, sopra la settimana tipo
+  var week=document.querySelector('.week');
+  function cambi(){
+    if(!week)return;
+    var box=document.getElementById('cambi');
+    if(!box){box=document.createElement('div');box.id='cambi';box.className='cambi';box.setAttribute('aria-live','polite');week.parentNode.insertBefore(box,week)}
+    box.textContent='';
+    var t=ST.oggi(),l=[];
+    for(var i=0;i<30;i++){var s=ST.piu(t,i),g=ST.info(s);if(g.speciale||g.avviso)l.push({s:s,i:i,g:g})}
+    box.hidden=!l.length;if(!l.length)return;
+    var h=document.createElement('p');h.className='lab';h.textContent='Cambi d\'orario e avvisi';box.appendChild(h);
+    var ul=document.createElement('ul');
+    l.forEach(function(x){
+      var li=document.createElement('li'),p=ST.parts(x.s),g=x.g;
+      li.className=g.aperto?(g.speciale?'sp':''):'c';
+      var dd=document.createElement('b');dd.className='x';
+      dd.textContent=(x.i===0?'Oggi':x.i===1?'Domani':names[ST.dow(x.s)])+' '+p.d+'/'+(p.m+1);
+      var st=document.createElement('span');st.className='st';
+      st.textContent=g.aperto?(g.speciale?'Aperti '+g.apreTxt+'–'+g.chiudeTxt:'Orario normale'):'Chiusi'+(g.motivo?' · '+g.motivo:'');
+      li.appendChild(dd);li.appendChild(st);
+      if(g.avviso){var a=document.createElement('span');a.className='av';a.textContent='📢 '+g.avviso;li.appendChild(a)}
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+  if(week){cambi();document.addEventListener('mxe-stato',cambi);}
 
   // reveal allo scroll (contenuti visibili anche senza)
   if('IntersectionObserver' in window&&!reduce){
@@ -263,7 +353,7 @@
     var dl=DATA.daily,tot=Math.min(15,dl.time.length-1),pages=Math.ceil(tot/PER),pg=+(b.dataset.page||0);
     var from=1+pg*PER,to=Math.min(dl.time.length-1,from+PER-1),h='';
     for(var i=from;i<=to;i++){
-      var x=dt(dl.time[i]),k=info(dl.weather_code[i],true),mon=x.getDay()===1;
+      var x=dt(dl.time[i]),k=info(dl.weather_code[i],true),mon=window.mxeStato?!window.mxeStato.info(dl.time[i]).aperto:x.getDay()===1;
       h+='<li class="'+(i===1?'is-today ':'')+(mon?'off':'')+'"><span class="lab">'+(i===1?'Oggi':dn[x.getDay()]+' '+x.getDate())+'</span>'+I[k[0]]+
         '<b class="x">'+Math.round(dl.temperature_2m_max[i])+'°<small> / '+Math.round(dl.temperature_2m_min[i])+'°</small></b>'+
         '<span class="m-p">💧 '+(dl.precipitation_probability_max[i]||0)+'%</span>'+(mon?'<span class="m-off">pista chiusa</span>':'')+'</li>';
@@ -305,4 +395,5 @@
     });
   }
   load();setInterval(load,10*60*1000);
+  document.addEventListener('mxe-stato',function(){boxes.forEach(days)});
 })();

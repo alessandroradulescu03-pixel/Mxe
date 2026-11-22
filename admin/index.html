@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gestione pista · MXE.45</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&display=swap">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../admin.css">
+</head>
+<body class="ax">
+<header class="nav">
+  <div class="wrap">
+    <a href="../" aria-label="Torna al sito MXE.45"><img src="../logo-dark.png" alt="MXE.45" width="102" height="30"></a>
+    <button type="button" class="ax-out" id="axOut" hidden>Esci</button>
+  </div>
+</header>
+
+<!-- ACCESSO -->
+<section id="axLogin" class="ax-login" hidden>
+  <div class="wrap">
+    <form id="loginForm" class="ax-card" novalidate>
+      <p class="lab">Area riservata</p>
+      <h1 class="x">Gestione pista</h1>
+      <p class="ax-intro">Scrivi la tua email e la tua password, poi premi <strong>Entra</strong>.</p>
+      <div class="ax-field">
+        <label for="lg-email">La tua email</label>
+        <input id="lg-email" type="email" autocomplete="username" inputmode="email" required>
+      </div>
+      <div class="ax-field">
+        <label for="lg-pass">La tua password</label>
+        <input id="lg-pass" type="password" autocomplete="current-password" required>
+      </div>
+      <label class="ax-check"><input type="checkbox" id="lg-show"> Mostra la password</label>
+      <p class="ax-err" id="loginErr" role="alert" hidden></p>
+      <button type="submit" class="ax-big" id="loginBtn">Entra</button>
+    </form>
+  </div>
+</section>
+
+<!-- AREA -->
+<main id="axApp" hidden>
+  <section class="ax-main">
+    <div class="wrap">
+      <div class="ax-top">
+        <div>
+          <p class="lab">Gestione pista</p>
+          <h1 class="x">Pista aperta o chiusa?</h1>
+        </div>
+        <button type="button" class="ax-btn" id="btnAggiorna">↻ Aggiorna</button>
+      </div>
+      <p class="ax-intro">Quello che scegli qui si vede subito sul sito. Se non tocchi niente vale l'orario normale: <strong>lunedì chiuso, gli altri giorni dalle 9 alle 17</strong>.</p>
+      <p class="ax-msg" id="psMsg" aria-live="polite">Sto caricando…</p>
+      <ul id="psDays" class="ps-days"></ul>
+      <div class="ps-more">
+        <button type="button" class="ax-btn" id="psAltri">Mostra le prossime 3 settimane</button>
+        <div class="ax-field"><label for="psData">Oppure scegli un giorno più lontano</label><input id="psData" type="date"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="ax-toast" id="axToast" role="status" aria-live="polite" hidden></div>
+
+<script src="../vendor/supabase.js"></script>
+<script src="../admin.js"></script>
+</body>
+</html>
