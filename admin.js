@@ -48,7 +48,8 @@
   }
   function ora(t){return t?String(t).slice(0,5).replace(/^0/,''):'';}
 
-  var righe={},giorni=7,aperto=null,extra=[]; // righe salvate, giorni mostrati, giorno in modifica, date scelte a mano
+  var righe={},giorni=7,aperto=null,calM=null; // righe salvate, giorni nella lista, giorno in modifica, mese del calendario
+  var MESI_C=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 
   // com'è davvero un giorno: orario normale + eventuale modifica salvata
   function stato(s){
@@ -79,15 +80,59 @@
   function date(){
     var t=oggi(),l=[];
     for(var i=0;i<giorni;i++)l.push(piu(t,i));
-    // anche i giorni lontani con una modifica salvata, e quelli scelti a mano
-    Object.keys(righe).concat(extra).forEach(function(s){if(s>=t&&l.indexOf(s)<0)l.push(s);});
+    // anche i giorni lontani con una modifica salvata
+    Object.keys(righe).forEach(function(s){if(s>=t&&l.indexOf(s)<0)l.push(s);});
     return l.sort();
   }
 
   function disegna(){
     var box=$('psDays');box.textContent='';
-    date().forEach(function(s){box.appendChild(riga(s));});
-    $('psAltri').textContent=giorni>7?'Mostra meno giorni':'Mostra le prossime 3 settimane';
+    var l=date();
+    l.forEach(function(s){box.appendChild(riga(s));});
+    // giorno scelto dal calendario che non è nella lista: lo mostro sotto il calendario
+    var cd=$('psCalDay');cd.textContent='';
+    if(aperto&&l.indexOf(aperto)<0)cd.appendChild(riga(aperto));
+    calendario();
+  }
+
+  // ---------- calendario del mese ----------
+  function calendario(){
+    var t=oggi(),pt=parts(t);
+    if(!calM)calM={y:pt.y,m:pt.m};
+    var min=pt.y*12+pt.m,cur=calM.y*12+calM.m,max=min+12;
+    var box=$('psCal');box.textContent='';
+    var head=el('div','pc-head');
+    var prev=btn('pc-nav','‹',function(){calM=cur-1<min?calM:{y:Math.floor((cur-1)/12),m:(cur-1)%12};calendario();});
+    prev.setAttribute('aria-label','Mese prima');prev.disabled=cur<=min;
+    var next=btn('pc-nav','›',function(){calM={y:Math.floor((cur+1)/12),m:(cur+1)%12};calendario();});
+    next.setAttribute('aria-label','Mese dopo');next.disabled=cur>=max;
+    head.appendChild(prev);head.appendChild(el('p','pc-title x',MESI_C[calM.m]+' '+calM.y));head.appendChild(next);
+    box.appendChild(head);
+    var g=el('div','pc-grid');g.setAttribute('role','grid');
+    ['L','M','M','G','V','S','D'].forEach(function(d){g.appendChild(el('span','pc-wd',d));});
+    var first=new Date(calM.y,calM.m,1),vuoti=(first.getDay()+6)%7,n=new Date(calM.y,calM.m+1,0).getDate();
+    for(var i=0;i<vuoti;i++)g.appendChild(el('span','pc-empty'));
+    for(var d=1;d<=n;d++){
+      var s=calM.y+'-'+pad(calM.m+1)+'-'+pad(d);
+      var c=el('button','pc-d');c.type='button';
+      c.appendChild(el('b',null,d));
+      if(s<t){c.className+=' pc-past';c.disabled=true;}
+      else{
+        var x=stato(s),lab;
+        c.className+=x.aperto?(x.speciale||x.avviso?' pc-spec':' pc-ok'):' pc-shut';
+        lab=!x.aperto?'chiuso':x.speciale?ora(x.apre).replace(':00','')+'–'+ora(x.chiude).replace(':00',''):x.avviso?'avviso':'';
+        if(lab)c.appendChild(el('small',null,lab));
+        c.setAttribute('aria-label',nome(s)+': '+(x.aperto?'aperti '+ora(x.apre)+'–'+ora(x.chiude):'chiusi'+(x.motivo?', '+x.motivo:''))+(x.avviso?', avviso: '+x.avviso:''));
+        if(s===t)c.className+=' pc-today';
+        if(s===aperto)c.className+=' pc-sel';
+        (function(s){c.addEventListener('click',function(){
+          aperto=s;disegna();
+          var r=document.querySelector('.ps-day.editing');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});
+        });})(s);
+      }
+      g.appendChild(c);
+    }
+    box.appendChild(g);
   }
 
   function riga(s){
@@ -211,16 +256,6 @@
   }
 
   // ---------- pulsanti ----------
-  $('psAltri').addEventListener('click',function(){giorni=giorni>7?7:21;disegna();});
-  $('psData').addEventListener('change',function(){
-    var v=this.value;if(!v)return;
-    if(v<oggi()){toast('Questo giorno è già passato.',true);this.value='';return;}
-    if(extra.indexOf(v)<0)extra.push(v);
-    aperto=v;disegna();this.value='';
-    var r=document.querySelector('.ps-day.editing');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});
-  });
-
-
   $('lg-show').addEventListener('change',function(){$('lg-pass').type=this.checked?'text':'password';});
   $('loginForm').addEventListener('submit',async function(ev){
     ev.preventDefault();

@@ -58,9 +58,13 @@
       <p class="ax-intro">Quello che scegli qui si vede subito sul sito. Se non tocchi niente vale l'orario normale: <strong>lunedì chiuso, gli altri giorni dalle 9 alle 17</strong>.</p>
       <p class="ax-msg" id="psMsg" aria-live="polite">Sto caricando…</p>
       <ul id="psDays" class="ps-days"></ul>
-      <div class="ps-more">
-        <button type="button" class="ax-btn" id="psAltri">Mostra le prossime 3 settimane</button>
-        <div class="ax-field"><label for="psData">Oppure scegli un giorno più lontano</label><input id="psData" type="date"></div>
+      <div class="ps-calbox">
+        <p class="lab">Più avanti</p>
+        <h2 class="x">Calendario</h2>
+        <p class="ax-intro">Tocca un giorno per cambiarlo, anche tra settimane o mesi (per esempio una gara).</p>
+        <div id="psCal" class="ps-cal"></div>
+        <ul class="ps-legend" aria-hidden="true"><li>Aperti, orario normale</li><li class="lg-shut">Chiusi</li><li class="lg-spec">Orario speciale o avviso</li></ul>
+        <ul id="psCalDay" class="ps-days ps-calday"></ul>
       </div>
     </div>
   </section>
